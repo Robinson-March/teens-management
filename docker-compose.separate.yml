@@ -58,6 +58,7 @@ services:
       - backend
     networks:
       - teens-network
+      - dokploy-network
 
 volumes:
   postgres_data:
@@ -66,3 +67,5 @@ volumes:
 networks:
   teens-network:
     driver: bridge
+  dokploy-network:
+    external: true
