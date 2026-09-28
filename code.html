@@ -263,7 +263,7 @@
 <input type="hidden" id="delete-member-id">
 <div class="mb-5">
   <label class="block text-xs font-bold text-slate-600 mb-1" for="delete-auth-code">Authorization Code</label>
-  <input class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-rose-500 focus:border-rose-500 px-3 py-2.5 transition-all outline-none" id="delete-auth-code" required type="password" placeholder="Enter code..." autocomplete="new-password" data-lpignore="true">
+  <input class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-rose-500 focus:border-rose-500 px-3 py-2.5 transition-all outline-none" style="-webkit-text-security: disc; text-security: disc;" id="delete-auth-code" required type="text" placeholder="Enter code..." autocomplete="off" data-lpignore="true">
 </div>
 <div class="flex items-center justify-end gap-3 pt-2">
 <button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all" onclick="closeDeleteModal()" type="button">
@@ -359,7 +359,7 @@
 
 <div id="edit-auth-section" class="hidden">
 <label class="block text-xs font-bold text-slate-700 mb-1">Security Code (Required for edits) <span class="text-rose-500">*</span></label>
-<input id="edit-auth-code" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Enter authorization code" type="password" autocomplete="new-password" data-lpignore="true">
+<input id="edit-auth-code" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" style="-webkit-text-security: disc; text-security: disc;" placeholder="Enter authorization code" type="text" autocomplete="off" data-lpignore="true">
 </div>
 
 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
