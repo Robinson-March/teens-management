@@ -189,18 +189,7 @@
 <section class="bg-white rounded-2xl p-6 border border-slate-100 shadow-card-soft" data-purpose="members-directory-table">
 <!-- Header Controls: Filter Pill Buttons + Search & Export -->
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-<!-- Pill toggle tabs -->
-<div class="inline-flex p-1 bg-slate-100/80 rounded-xl" role="tablist">
-<button aria-selected="true" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950" id="tab-active-btn" onclick="switchTab('active')" role="tab">
-  Active Members
-</button>
-<button aria-selected="false" class="px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all" id="tab-attention-btn" onclick="switchTab('attention')" role="tab">
-  Need Attention
-</button>
-<button aria-selected="false" class="px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all" id="tab-all-btn" onclick="switchTab('')" role="tab">
-  All Teens
-</button>
-</div>
+<!-- Pill toggle tabs removed -->
 <!-- Search Input & Quick Filter -->
 <div class="flex items-center gap-3">
 <div class="relative w-full sm:w-64">
@@ -395,7 +384,7 @@
 <script>
   // 1. Base Configuration & State
   const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:5106' : '';
-  let currentStatus = 'active'; // 'active', 'attention', or '' (all)
+  let currentStatus = ''; // 'active', 'attention', or '' (all)
   let currentSearch = '';
   let currentPage = 1;
   const pageSize = 10;
@@ -647,32 +636,7 @@
   }
 
   // 5. Tab & Search Filters
-  function switchTab(status) {
-    currentStatus = status;
-    currentPage = 1;
 
-    const btnActive = document.getElementById('tab-active-btn');
-    const btnAttention = document.getElementById('tab-attention-btn');
-    const btnAll = document.getElementById('tab-all-btn');
-
-    [btnActive, btnAttention, btnAll].forEach(b => {
-      b.className = 'px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all';
-      b.setAttribute('aria-selected', 'false');
-    });
-
-    if (status === 'active') {
-      btnActive.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
-      btnActive.setAttribute('aria-selected', 'true');
-    } else if (status === 'attention') {
-      btnAttention.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
-      btnAttention.setAttribute('aria-selected', 'true');
-    } else {
-      btnAll.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
-      btnAll.setAttribute('aria-selected', 'true');
-    }
-
-    loadMembers();
-  }
 
   function handleSearch(val) {
     clearTimeout(searchTimer);
