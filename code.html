@@ -325,6 +325,7 @@
 <option value="Sanctuary Keepers">Sanctuary Keepers</option>
 <option value="Teens Ushering">Teens Ushering</option>
 <option value="Drama & Creative">Drama &amp; Creative Arts</option>
+<option value="Library">Library</option>
 <option value="General Assembly">General Assembly (Undecided)</option>
 </select>
 </div>
@@ -545,7 +546,7 @@
 
   function getUnitBadge(dept) {
     const d = (dept || 'General Assembly').toLowerCase();
-    if (d.includes('media') || d.includes('sound')) {
+    if (d.includes('media') || d.includes('sound') || d.includes('publicity')) {
       return {
         bg: 'bg-blue-50 text-blue-700 border-blue-100',
         dot: 'bg-blue-600',
@@ -553,7 +554,7 @@
         icon: '<span class="w-4 h-4 rounded-full border-2 border-blue-600 flex items-center justify-center"><span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span></span>'
       };
     }
-    if (d.includes('choir') || d.includes('vocal')) {
+    if (d.includes('choir') || d.includes('vocal') || d.includes('music')) {
       return {
         bg: 'bg-purple-50 text-purple-700 border-purple-100',
         dot: 'bg-purple-600',
@@ -575,6 +576,14 @@
         dot: 'bg-rose-500',
         iconBg: 'bg-rose-100 border-rose-200',
         icon: '<span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>'
+      };
+    }
+    if (d.includes('library')) {
+      return {
+        bg: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+        dot: 'bg-emerald-500',
+        iconBg: 'bg-emerald-100 border-emerald-200',
+        icon: '<span class="text-emerald-700 text-[10px] font-bold">LB</span>'
       };
     }
     return {
