@@ -326,6 +326,7 @@
 <option value="Teens Ushering">Teens Ushering</option>
 <option value="Drama & Creative">Drama &amp; Creative Arts</option>
 <option value="Library">Library</option>
+<option value="Bible Study">Bible Study</option>
 <option value="General Assembly">General Assembly (Undecided)</option>
 </select>
 </div>
@@ -584,6 +585,14 @@
         dot: 'bg-emerald-500',
         iconBg: 'bg-emerald-100 border-emerald-200',
         icon: '<span class="text-emerald-700 text-[10px] font-bold">LB</span>'
+      };
+    }
+    if (d.includes('bible study')) {
+      return {
+        bg: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+        dot: 'bg-indigo-500',
+        iconBg: 'bg-indigo-100 border-indigo-200',
+        icon: '<span class="text-indigo-700 text-[10px] font-bold">BS</span>'
       };
     }
     return {
