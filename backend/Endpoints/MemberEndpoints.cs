@@ -222,8 +222,14 @@ public static class MemberEndpoints
         .WithSummary("Update an existing member profile.");
 
         // 6. DELETE /api/members/{id} - Remove member
-        group.MapDelete("/{id:guid}", async (Guid id, AppDbContext db) =>
+        group.MapDelete("/{id:guid}", async (Guid id, [FromHeader(Name = "X-Delete-Code")] string? code, IConfiguration config, AppDbContext db) =>
         {
+            var expectedCode = config["DeleteCode"];
+            if (string.IsNullOrEmpty(expectedCode) || code != expectedCode)
+            {
+                return Results.Unauthorized();
+            }
+
             var member = await db.Members.FindAsync(id);
             if (member is null)
             {

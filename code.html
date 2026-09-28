@@ -213,12 +213,13 @@
 <th class="py-3 px-3">Academic Level</th>
 <th class="py-3 px-3">Church Unit</th>
 <th class="py-3 px-3">Service</th>
+<th class="py-3 px-3 text-right">Actions</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-slate-100 text-xs" id="members-table-body">
 <!-- Populated dynamically by JavaScript -->
 <tr>
-  <td colspan="4" class="py-12 text-center text-slate-400">
+  <td colspan="5" class="py-12 text-center text-slate-400">
     <div class="inline-block animate-spin w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full mb-2"></div>
     <p>Loading members from Teens Church API...</p>
   </td>
@@ -240,6 +241,35 @@
 <!-- END: MainContentArea -->
 </main>
 <!-- END: MasterFloatingDashboardContainer -->
+
+<!-- BEGIN: DeleteMemberModalDialog -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="delete-member-modal">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+<div class="text-center mb-6">
+<div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+</div>
+<h3 class="text-lg font-bold text-slate-800">Delete Member</h3>
+<p class="text-xs text-slate-500 mt-2">Are you sure? This action cannot be undone. Enter the authorization code to proceed.</p>
+</div>
+<form id="delete-member-form" onsubmit="handleDeleteMember(event)">
+<input type="hidden" id="delete-member-id">
+<div class="mb-5">
+  <label class="block text-xs font-bold text-slate-600 mb-1" for="delete-auth-code">Authorization Code</label>
+  <input class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-rose-500 focus:border-rose-500 px-3 py-2.5 transition-all outline-none" id="delete-auth-code" required type="password" placeholder="Enter code...">
+</div>
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all" onclick="closeDeleteModal()" type="button">
+  Cancel
+</button>
+<button id="confirm-delete-btn" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2" type="submit">
+  <span>Confirm Delete</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- END: DeleteMemberModalDialog -->
 
 <!-- BEGIN: AddMemberModalDialog -->
 <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="add-member-modal">
@@ -591,6 +621,11 @@
           <td class="py-3.5 px-3 text-slate-600 font-medium">
             ${escapeHtml(m.serviceTime || '8:30 service')}
           </td>
+          <td class="py-3.5 px-3 text-right">
+            <button onclick="openDeleteModal('${m.id}')" class="text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 p-1.5 rounded-lg transition-colors" title="Delete Member">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+          </td>
         </tr>
       `;
     }).join('');
@@ -702,6 +737,54 @@
     } finally {
       saveBtn.disabled = false;
       saveBtn.innerHTML = `<span>Save Teen Record</span>`;
+    }
+  }
+
+  // 6.5 Delete Member
+  function openDeleteModal(id) {
+    document.getElementById('delete-member-form').reset();
+    document.getElementById('delete-member-id').value = id;
+    document.getElementById('delete-member-modal').classList.remove('hidden');
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('delete-member-modal').classList.add('hidden');
+  }
+
+  async function handleDeleteMember(e) {
+    e.preventDefault();
+    const id = document.getElementById('delete-member-id').value;
+    const code = document.getElementById('delete-auth-code').value;
+    const btn = document.getElementById('confirm-delete-btn');
+    
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span>
+      <span>Deleting...</span>
+    `;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/members/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'X-Delete-Code': code
+        }
+      });
+
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error("Invalid authorization code.");
+        throw new Error('Failed to delete member.');
+      }
+
+      showToast('Member deleted successfully.');
+      closeDeleteModal();
+      loadMembers();
+      loadStats();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<span>Confirm Delete</span>`;
     }
   }
 
