@@ -43,6 +43,13 @@ services:
     networks:
       - teens-network
       - dokploy-network
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.teens-app.rule=Host(`teens.robinsonmarch.com`)
+      - traefik.http.services.teens-app.loadbalancer.server.port=8080
+      - traefik.http.routers.teens-app.entrypoints=websecure
+      - traefik.http.routers.teens-app.tls.certresolver=letsencrypt
 
 volumes:
   postgres_data:

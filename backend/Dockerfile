@@ -31,6 +31,6 @@ EXPOSE 8080
 COPY --from=build /app/publish .
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f -I http://localhost:8080/api/health || exit 1
+  CMD curl -f -s http://localhost:8080/api/health || exit 1
 
 ENTRYPOINT ["dotnet", "TeensChurch.API.dll"]
