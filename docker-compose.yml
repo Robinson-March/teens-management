@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # 1. PostgreSQL Database Service
+  # ==========================================
+  db:
+    image: postgres:16-alpine
+    container_name: teens-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-TeensChurchDb}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password_change_me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-TeensChurchDb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - teens-network
+
+  # ==========================================
+  # 2. Teens Church Backend & Embedded Frontend
+  # ==========================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: teens-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB:-TeensChurchDb};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres_password_change_me}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - teens-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  teens-network:
+    driver: bridge

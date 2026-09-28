@@ -1,0 +1,862 @@
+<!DOCTYPE html><html lang="en" style=""><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Teens Church Database - Members Directory</title>
+<!-- Tailwind CSS CDN with forms & container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            pastel: {
+              lavender: '#f3e8ff',
+              lavenderDark: '#581c87',
+              pink: '#fce7f3',
+              pinkDark: '#831843',
+              mint: '#ecfdf5',
+              mintDark: '#064e3b',
+              lime: '#f0fdf4',
+            }
+          },
+          boxShadow: {
+            'card-soft': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02)',
+            'master': '0 25px 60px -15px rgba(100, 116, 139, 0.16), 0 0 1px 1px rgba(226, 232, 240, 0.6)',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars-and-reset">
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: radial-gradient(circle at 50% 20%, #eff4fa 0%, #e2e8f0 100%);
+    }
+    /* Sleek custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+<style data-purpose="chart-animations">
+    @keyframes pulseSoft {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+    .chart-node {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .chart-node:hover {
+      transform: translateY(-3px) scale(1.15);
+      cursor: pointer;
+    }
+    .toast-anim {
+      animation: slideInToast 0.3s ease-out forwards;
+    }
+    @keyframes slideInToast {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700 p-3 sm:p-6 lg:p-8 flex items-center justify-center">
+<!-- BEGIN: MasterFloatingDashboardContainer -->
+<main class="w-full max-w-[1520px] bg-white rounded-[2rem] shadow-master border border-slate-100 flex flex-col lg:flex-row overflow-hidden min-h-[920px]">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between p-6 shrink-0" data-purpose="navigation-sidebar">
+<div>
+<!-- Organization / App Brand Header -->
+<div class="mb-8 flex items-center gap-3 px-3 py-2.5 bg-slate-50/80 rounded-2xl border border-slate-200/80 shadow-xs">
+  <img alt="Teens Church Logo" class="w-9 h-9 rounded-xl object-contain bg-white p-0.5 border border-slate-200 shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UV-H42B9hGYbFNhubWOQLkQC5HgvRPeCloRXcFTgb2D07MnBGiPEHB5L11D2Eol4e3CvWJVimpkXDQdHWqwT0uyp8_9oQbHGZh3JvFKsBmRKMEZ3gDD3QNfW7jUf22bCIPdbw3dLZPXbAGPvjbBARVAAOXYyOnWEHelQMYZH6dXYXpe-6Bcice0Gf1I70jrmLAYYLnctIu8nts66ex1wD-y4Oger72-cKzi4wkqNU72iyCnQgWg_jUV8M">
+  <div class="truncate">
+    <p class="text-sm font-bold text-slate-800 leading-tight">Teens Church</p>
+  </div>
+</div>
+
+<!-- Navigation Links List -->
+<nav aria-label="Main Navigation" class="space-y-1">
+<!-- Overview / Dashboard -->
+<a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-bold bg-blue-50/80 text-blue-600 border border-blue-100/60 shadow-xs transition-colors" href="#">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="">Dashboard</span>
+</a>
+</nav>
+</div>
+
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+
+<!-- BEGIN: MainContentArea -->
+<div class="flex-1 flex flex-col p-6 sm:p-8 lg:p-10 overflow-y-auto bg-slate-50/30" data-purpose="primary-workspace">
+<!-- BEGIN: HeaderBreadcrumbSection -->
+<header class="flex flex-col sm:flex-row sm:items-center pb-6 gap-4 justify-between" data-purpose="dashboard-header">
+<div>
+  <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Teens Church Management</h1>
+  <p class="text-xs text-slate-500 font-medium">Member directory, academic tracking, and ministry assignments</p>
+</div>
+<div class="flex items-center gap-2.5">
+<!-- Import CSV button -->
+<button class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-xs transition-all active:scale-95" onclick="openBulkUploadModal()" type="button" title="Bulk import teens via CSV">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Import CSV</span>
+</button>
+<!-- Quick action add button -->
+<button class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all" data-purpose="open-add-member-dialog" onclick="openAddMemberModal()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="">Add Teen Member</span>
+</button>
+</div>
+</header>
+<!-- END: HeaderBreadcrumbSection -->
+
+<!-- BEGIN: TopMetricKpiCards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" data-purpose="kpi-stat-cards">
+<!-- Card 1: Solid Vibrant Blue (Total Registered) -->
+<article class="bg-blue-600 rounded-2xl p-5 text-center text-white shadow-sm flex flex-col justify-center items-center h-28 transform transition-transform hover:-translate-y-0.5">
+<span class="text-xs font-medium text-blue-100">Total Registered Teens</span>
+<p class="text-3xl font-extrabold tracking-tight mt-1 text-white" id="kpi-total-registered">--</p>
+</article>
+<!-- Card 2: Soft Pastel Lavender / Purple (Active Units) -->
+<article class="bg-[#f2e7fe] rounded-2xl p-5 text-center text-purple-950 shadow-xs flex flex-col justify-center items-center h-28 border border-purple-200/50 transform transition-transform hover:-translate-y-0.5">
+<span class="text-xs font-semibold text-purple-700/80">Active Church Units</span>
+<p class="text-3xl font-extrabold tracking-tight mt-1 text-purple-950" id="kpi-active-units">--</p>
+</article>
+<!-- Card 3: Soft Pastel Pink / Blush (Average Age) -->
+<article class="bg-[#fce7f3] rounded-2xl p-5 text-center text-pink-950 shadow-xs flex flex-col justify-center items-center h-28 border border-pink-200/50 transform transition-transform hover:-translate-y-0.5">
+<span class="text-xs font-semibold text-pink-700/80">Average Youth Age</span>
+<p class="text-3xl font-extrabold tracking-tight mt-1 text-pink-950" id="kpi-average-age">--</p>
+</article>
+<!-- Card 4: Soft Pastel Mint / Light Lime (High School & Candidates) -->
+<article class="bg-[#ecfdf3] rounded-2xl p-5 text-center text-emerald-950 shadow-xs flex flex-col justify-center items-center h-28 border border-emerald-200/50 transform transition-transform hover:-translate-y-0.5">
+<span class="text-xs font-semibold text-emerald-800/80">Senior High &amp; WAEC/JAMB</span>
+<p class="text-3xl font-extrabold tracking-tight mt-1 text-emerald-950" id="kpi-senior-high">--</p>
+</article>
+</section>
+<!-- END: TopMetricKpiCards -->
+
+<!-- BEGIN: SegmentedClassDistributionBar -->
+<section class="bg-white rounded-2xl p-5 border border-slate-100 shadow-card-soft mb-6" data-purpose="academic-distribution-overview">
+<div class="flex justify-between items-center mb-2">
+  <span class="text-xs font-bold text-slate-700">Academic &amp; School Distribution</span>
+  <span class="text-[10px] text-slate-400 font-medium">Real-time cohort breakdown</span>
+</div>
+<!-- Segment Labels above bar -->
+<div id="academic-labels-container" class="flex justify-between items-center text-[11px] font-bold text-slate-500 mb-2 px-1">
+  <span>Loading academic distribution...</span>
+</div>
+<!-- Multi-segment continuous bar -->
+<div id="academic-segments-container" class="h-3 w-full bg-slate-100 rounded-full flex overflow-hidden shadow-inner">
+  <div class="h-full bg-slate-200 animate-pulse w-full"></div>
+</div>
+<!-- Legend Tags with round dot indicators -->
+<div id="academic-legend-container" class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4 text-[11px] font-medium text-slate-600 justify-start sm:justify-between px-1">
+</div>
+</section>
+<!-- END: SegmentedClassDistributionBar -->
+
+<!-- BEGIN: MemberDirectoryTableSection -->
+<section class="bg-white rounded-2xl p-6 border border-slate-100 shadow-card-soft" data-purpose="members-directory-table">
+<!-- Header Controls: Filter Pill Buttons + Search & Export -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+<!-- Pill toggle tabs -->
+<div class="inline-flex p-1 bg-slate-100/80 rounded-xl" role="tablist">
+<button aria-selected="true" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950" id="tab-active-btn" onclick="switchTab('active')" role="tab">
+  Active Members
+</button>
+<button aria-selected="false" class="px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all" id="tab-attention-btn" onclick="switchTab('attention')" role="tab">
+  Need Attention
+</button>
+<button aria-selected="false" class="px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all" id="tab-all-btn" onclick="switchTab('')" role="tab">
+  All Teens
+</button>
+</div>
+<!-- Search Input & Quick Filter -->
+<div class="flex items-center gap-3">
+<div class="relative w-full sm:w-64">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<input class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-400 font-medium" id="search-input" oninput="handleSearch(this.value)" placeholder="Search member, unit or class..." type="text">
+</div>
+<button onclick="exportMembersCsv()" class="p-2 border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-lg text-xs transition-colors" title="Export CSV" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+
+<!-- Table / List Layout -->
+<div class="overflow-x-auto mt-2">
+<table class="w-full text-left border-collapse" id="members-table">
+<thead>
+<tr class="text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+<th class="py-3 px-3">Teen Member &amp; Contact</th>
+<th class="py-3 px-3">Academic Level</th>
+<th class="py-3 px-3">Church Unit</th>
+<th class="py-3 px-3">Service</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-xs" id="members-table-body">
+<!-- Populated dynamically by JavaScript -->
+<tr>
+  <td colspan="4" class="py-12 text-center text-slate-400">
+    <div class="inline-block animate-spin w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full mb-2"></div>
+    <p>Loading members from Teens Church API...</p>
+  </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- Table Pagination Footer -->
+<div class="flex flex-col sm:flex-row items-center justify-between pt-4 mt-2 border-t border-slate-100 text-xs text-slate-400 font-medium gap-3">
+<p id="pagination-info">Showing members...</p>
+<div class="flex items-center gap-1" id="pagination-buttons">
+  <!-- Dynamic buttons -->
+</div>
+</div>
+</section>
+<!-- END: MemberDirectoryTableSection -->
+</div>
+<!-- END: MainContentArea -->
+</main>
+<!-- END: MasterFloatingDashboardContainer -->
+
+<!-- BEGIN: AddMemberModalDialog -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="add-member-modal">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+<div class="flex items-center justify-between pb-4 border-b border-slate-100">
+<div>
+<h3 class="text-base font-bold text-slate-800" id="modal-title">Register New Teen Member</h3>
+<p class="text-xs text-slate-400">Add profile to Teens Church Directory</p>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors" onclick="closeAddMemberModal()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+
+<form class="space-y-4 mt-5" id="add-member-form" onsubmit="handleSaveMember(event)">
+<input type="hidden" id="member-edit-id" value="">
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Full Name <span class="text-rose-500">*</span></label>
+<input id="member-fullname" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. Samuel Adekunle" required type="text">
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Age</label>
+<input id="member-age" min="5" max="35" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. 16" type="number">
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Academic Class</label>
+<select id="member-academic" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
+<option value="Junior Secondary (JSS1)">JSS 1</option>
+<option value="Junior Secondary (JSS2)">JSS 2</option>
+<option value="Graduating JSS (JSS3)">JSS 3</option>
+<option value="Senior Secondary (SS1)">SSS 1</option>
+<option value="Senior Secondary (SS2)">SSS 2</option>
+<option value="Senior Secondary (SS3)" selected>SSS 3</option>
+<option value="Pre-Varsity (A-Level)">Pre-Varsity / Jambite</option>
+</select>
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Assigned Ministry Unit</label>
+<select id="member-department" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
+<option value="Media & Tech">Media &amp; Sound Tech</option>
+<option value="Choir & Vocals">Choir &amp; Vocals</option>
+<option value="Sanctuary Keepers">Sanctuary Keepers</option>
+<option value="Teens Ushering">Teens Ushering</option>
+<option value="Drama & Creative">Drama &amp; Creative Arts</option>
+<option value="General Assembly">General Assembly (Undecided)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Service Time</label>
+<select id="member-service" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
+<option value="8:30 service" selected>8:30 service</option>
+<option value="6:30 service">6:30 service</option>
+<option value="10:30 service">10:30 service</option>
+</select>
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Status</label>
+<select id="member-status" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
+<option value="active" selected>Active</option>
+<option value="attention">Needs Attention</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Guardian Name</label>
+<input id="member-guardian" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. Mrs. Adekunle" type="text">
+</div>
+</div>
+
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / Phone Contact</label>
+<input id="member-phone" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. 0803 123 4567" type="tel">
+</div>
+
+<div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+<button class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 rounded-xl transition-colors" onclick="closeAddMemberModal()" type="button">
+  Cancel
+</button>
+<button id="save-member-btn" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2" type="submit">
+  <span>Save Teen Record</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- END: AddMemberModalDialog -->
+
+<!-- BEGIN: BulkUploadModalDialog -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="bulk-upload-modal">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+<div class="flex items-center justify-between pb-4 border-b border-slate-100">
+<div>
+<h3 class="text-base font-bold text-slate-800">Bulk Import via CSV</h3>
+<p class="text-xs text-slate-400">Upload roster or member list</p>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors" onclick="closeBulkUploadModal()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+
+<form class="space-y-4 mt-5" onsubmit="handleBulkUpload(event)">
+<div class="p-6 border-2 border-dashed border-slate-200 hover:border-blue-500 rounded-2xl text-center bg-slate-50/50 cursor-pointer transition-colors" onclick="document.getElementById('csv-file-input').click()">
+  <svg class="w-8 h-8 text-blue-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+  <p class="text-xs font-bold text-slate-700" id="file-label">Click to select CSV file</p>
+  <p class="text-[10px] text-slate-400 mt-1">Maximum file size: 5MB</p>
+  <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="handleFileSelected(this)">
+</div>
+
+<div class="flex items-center justify-between text-[11px] text-slate-500 px-1">
+  <span>Need the format template?</span>
+  <a href="#" onclick="downloadCsvTemplate(event)" class="text-blue-600 hover:underline font-semibold flex items-center gap-1">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+    Download Template
+  </a>
+</div>
+
+<div id="bulk-upload-result" class="hidden text-xs p-3 rounded-xl"></div>
+
+<div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+<button class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 rounded-xl transition-colors" onclick="closeBulkUploadModal()" type="button">
+  Cancel
+</button>
+<button id="upload-csv-btn" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2" type="submit">
+  <span>Start Upload</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- END: BulkUploadModalDialog -->
+
+<!-- Toast Notification Container -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+<!-- Integrated API Client Scripts -->
+<script>
+  // 1. Base Configuration & State
+  const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:5106' : '';
+  let currentStatus = 'active'; // 'active', 'attention', or '' (all)
+  let currentSearch = '';
+  let currentPage = 1;
+  const pageSize = 10;
+  let searchTimer = null;
+
+  // 2. Health & Connection check on startup
+  async function checkApiHealth() {
+    const dot = document.getElementById('api-status-dot');
+    const label = document.getElementById('api-status-text');
+    if (!dot || !label) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/health`);
+      if (res.ok) {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+        label.textContent = 'API Connected';
+        label.className = 'text-[11px] font-medium text-emerald-600';
+      } else {
+        throw new Error('Unhealthy');
+      }
+    } catch {
+      dot.className = 'w-2 h-2 rounded-full bg-rose-500';
+      label.textContent = 'API Offline';
+      label.className = 'text-[11px] font-medium text-rose-600';
+    }
+  }
+
+  // 3. Load Stats & KPI Cards + Academic Distribution
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API_BASE}/api/members/stats`);
+      if (!res.ok) return;
+      const stats = await res.json();
+
+      // Update KPI Cards
+      document.getElementById('kpi-total-registered').textContent = stats.totalRegistered ?? 0;
+      document.getElementById('kpi-active-units').textContent = `${stats.activeUnitsCount ?? 0} Units`;
+      document.getElementById('kpi-average-age').textContent = `${stats.averageAge ?? 0} yrs`;
+      document.getElementById('kpi-senior-high').textContent = stats.seniorHighAndCandidatesCount ?? 0;
+
+      // Update Academic Distribution Bar & Legend
+      renderAcademicDistribution(stats.academicDistribution || {});
+    } catch (err) {
+      console.warn('Could not load stats:', err);
+    }
+  }
+
+  function renderAcademicDistribution(dist) {
+    const colors = [
+      { key: 'Junior Teens (JSS1-2)', bg: 'bg-sky-200', text: 'text-sky-950', dot: 'bg-sky-200' },
+      { key: 'Graduating JSS (JSS3)', bg: 'bg-teal-300', text: 'text-teal-950', dot: 'bg-teal-300' },
+      { key: 'Senior Teens (SS1)', bg: 'bg-emerald-300', text: 'text-emerald-950', dot: 'bg-emerald-300' },
+      { key: 'Exam Class (SS2/SS3)', bg: 'bg-amber-300', text: 'text-amber-950', dot: 'bg-amber-300' },
+      { key: 'Pre-Varsity / Gap', bg: 'bg-purple-300', text: 'text-purple-950', dot: 'bg-purple-300' }
+    ];
+
+    const labelsContainer = document.getElementById('academic-labels-container');
+    const barContainer = document.getElementById('academic-segments-container');
+    const legendContainer = document.getElementById('academic-legend-container');
+
+    labelsContainer.innerHTML = '';
+    barContainer.innerHTML = '';
+    legendContainer.innerHTML = '';
+
+    colors.forEach(item => {
+      const pct = dist[item.key] ?? 0;
+
+      // Label
+      const spanLabel = document.createElement('span');
+      spanLabel.className = 'font-bold';
+      spanLabel.textContent = `${pct}%`;
+      labelsContainer.appendChild(spanLabel);
+
+      // Bar Segment
+      const segment = document.createElement('div');
+      segment.className = `h-full ${item.bg} transition-all duration-500`;
+      segment.style.width = `${Math.max(pct, 2)}%`;
+      segment.title = `${item.key}: ${pct}%`;
+      barContainer.appendChild(segment);
+
+      // Legend Item
+      const legendItem = document.createElement('div');
+      legendItem.className = 'flex items-center gap-1.5';
+      legendItem.innerHTML = `
+        <span class="w-2.5 h-2.5 rounded-xs ${item.dot}"></span>
+        <span>${item.key} (${pct}%)</span>
+      `;
+      legendContainer.appendChild(legendItem);
+    });
+  }
+
+  // 4. Load Members Table
+  async function loadMembers() {
+    const tbody = document.getElementById('members-table-body');
+    const params = new URLSearchParams();
+    params.set('page', currentPage);
+    params.set('pageSize', pageSize);
+    if (currentStatus) params.set('status', currentStatus);
+    if (currentSearch) params.set('search', currentSearch);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/members?${params.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch members');
+      const data = await res.json();
+      renderMembersTable(data);
+    } catch (err) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="py-8 text-center text-rose-500 font-medium">
+            Could not connect to backend server. Make sure API is running at ${API_BASE}.
+          </td>
+        </tr>
+      `;
+    }
+  }
+
+  function getUnitBadge(dept) {
+    const d = (dept || 'General Assembly').toLowerCase();
+    if (d.includes('media') || d.includes('sound')) {
+      return {
+        bg: 'bg-blue-50 text-blue-700 border-blue-100',
+        dot: 'bg-blue-600',
+        iconBg: 'bg-blue-100 border-blue-200',
+        icon: '<span class="w-4 h-4 rounded-full border-2 border-blue-600 flex items-center justify-center"><span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span></span>'
+      };
+    }
+    if (d.includes('choir') || d.includes('vocal')) {
+      return {
+        bg: 'bg-purple-50 text-purple-700 border-purple-100',
+        dot: 'bg-purple-600',
+        iconBg: 'bg-purple-100 border-purple-200',
+        icon: '<span class="w-3.5 h-3.5 bg-purple-500 rotate-45 rounded-xs flex items-center justify-center"><span class="w-1.5 h-1.5 bg-white rounded-full"></span></span>'
+      };
+    }
+    if (d.includes('sanctuary') || d.includes('keeper')) {
+      return {
+        bg: 'bg-amber-50 text-amber-700 border-amber-100',
+        dot: 'bg-amber-500',
+        iconBg: 'bg-amber-100 border-amber-200',
+        icon: '<span class="text-amber-700 text-xs font-black">SK</span>'
+      };
+    }
+    if (d.includes('drama') || d.includes('creative')) {
+      return {
+        bg: 'bg-rose-50 text-rose-700 border-rose-100',
+        dot: 'bg-rose-500',
+        iconBg: 'bg-rose-100 border-rose-200',
+        icon: '<span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>'
+      };
+    }
+    return {
+      bg: 'bg-slate-50 text-slate-700 border-slate-200',
+      dot: 'bg-slate-400',
+      iconBg: 'bg-slate-100 border-slate-200',
+      icon: '<span class="text-slate-500 text-[10px] font-bold">TC</span>'
+    };
+  }
+
+  function renderMembersTable(data) {
+    const tbody = document.getElementById('members-table-body');
+    const items = data.items || [];
+    const total = data.totalCount || 0;
+
+    if (items.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="py-12 text-center text-slate-400">
+            <p class="font-bold text-slate-600 text-sm mb-1">No teen records found</p>
+            <p class="text-xs">Try clearing your filters or register a new member profile.</p>
+          </td>
+        </tr>
+      `;
+      document.getElementById('pagination-info').textContent = 'Showing 0 members';
+      document.getElementById('pagination-buttons').innerHTML = '';
+      return;
+    }
+
+    tbody.innerHTML = items.map(m => {
+      const unitStyle = getUnitBadge(m.departments);
+      const guardianInfo = [m.guardianName ? `Guardian: ${escapeHtml(m.guardianName)}` : null, m.phoneNumber ? escapeHtml(m.phoneNumber) : null].filter(Boolean).join(' • ');
+
+      return `
+        <tr class="hover:bg-slate-50/70 transition-colors group member-row" data-id="${m.id}">
+          <td class="py-3.5 px-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full ${unitStyle.iconBg} flex items-center justify-center shrink-0 border">
+                ${unitStyle.icon}
+              </div>
+              <div>
+                <p class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">${escapeHtml(m.fullName)}</p>
+                <p class="text-[11px] text-slate-400 font-medium">${guardianInfo || 'No contact specified'}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-3.5 px-3 font-semibold text-slate-700">
+            ${escapeHtml(m.academicLevel || 'Not Specified')}
+            <span class="block text-[10px] text-slate-400 font-normal">Age: ${m.age ? m.age + ' yrs' : 'N/A'}</span>
+          </td>
+          <td class="py-3.5 px-3">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${unitStyle.bg}">
+              <span class="w-1.5 h-1.5 rounded-full ${unitStyle.dot}"></span>
+              ${escapeHtml(m.departments || 'General Assembly')}
+            </span>
+          </td>
+          <td class="py-3.5 px-3 text-slate-600 font-medium">
+            ${escapeHtml(m.serviceTime || '8:30 service')}
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Pagination text
+    const startIdx = (data.page - 1) * data.pageSize + 1;
+    const endIdx = Math.min(startIdx + items.length - 1, total);
+    document.getElementById('pagination-info').textContent = `Showing ${startIdx} to ${endIdx} of ${total} teens registered`;
+
+    // Pagination buttons
+    renderPaginationButtons(data.totalPages || 1, data.page);
+  }
+
+  function renderPaginationButtons(totalPages, activePage) {
+    const container = document.getElementById('pagination-buttons');
+    if (totalPages <= 1) {
+      container.innerHTML = '';
+      return;
+    }
+
+    let html = `
+      <button onclick="changePage(${activePage - 1})" ${activePage <= 1 ? 'disabled class="px-2.5 py-1 rounded border border-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-600"'}>Prev</button>
+    `;
+
+    for (let p = 1; p <= totalPages; p++) {
+      if (p === activePage) {
+        html += `<button class="px-2.5 py-1 rounded bg-blue-600 text-white font-bold">${p}</button>`;
+      } else {
+        html += `<button onclick="changePage(${p})" class="px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-600">${p}</button>`;
+      }
+    }
+
+    html += `
+      <button onclick="changePage(${activePage + 1})" ${activePage >= totalPages ? 'disabled class="px-2.5 py-1 rounded border border-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-600"'}>Next</button>
+    `;
+
+    container.innerHTML = html;
+  }
+
+  function changePage(page) {
+    currentPage = page;
+    loadMembers();
+  }
+
+  // 5. Tab & Search Filters
+  function switchTab(status) {
+    currentStatus = status;
+    currentPage = 1;
+
+    const btnActive = document.getElementById('tab-active-btn');
+    const btnAttention = document.getElementById('tab-attention-btn');
+    const btnAll = document.getElementById('tab-all-btn');
+
+    [btnActive, btnAttention, btnAll].forEach(b => {
+      b.className = 'px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all';
+      b.setAttribute('aria-selected', 'false');
+    });
+
+    if (status === 'active') {
+      btnActive.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
+      btnActive.setAttribute('aria-selected', 'true');
+    } else if (status === 'attention') {
+      btnAttention.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
+      btnAttention.setAttribute('aria-selected', 'true');
+    } else {
+      btnAll.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
+      btnAll.setAttribute('aria-selected', 'true');
+    }
+
+    loadMembers();
+  }
+
+  function handleSearch(val) {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      currentSearch = val.trim();
+      currentPage = 1;
+      loadMembers();
+    }, 250);
+  }
+
+  // 6. Add Member Modal & Submission
+  function openAddMemberModal() {
+    document.getElementById('add-member-form').reset();
+    document.getElementById('member-edit-id').value = '';
+    document.getElementById('modal-title').textContent = 'Register New Teen Member';
+    document.getElementById('add-member-modal').classList.remove('hidden');
+  }
+
+  function closeAddMemberModal() {
+    document.getElementById('add-member-modal').classList.add('hidden');
+  }
+
+  async function handleSaveMember(e) {
+    e.preventDefault();
+    const saveBtn = document.getElementById('save-member-btn');
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = `
+      <span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span>
+      <span>Saving...</span>
+    `;
+
+    const ageVal = document.getElementById('member-age').value;
+    const payload = {
+      fullName: document.getElementById('member-fullname').value.trim(),
+      age: ageVal ? parseInt(ageVal, 10) : null,
+      academicLevel: document.getElementById('member-academic').value,
+      departments: document.getElementById('member-department').value,
+      serviceTime: document.getElementById('member-service').value,
+      guardianName: document.getElementById('member-guardian').value.trim() || null,
+      phoneNumber: document.getElementById('member-phone').value.trim() || null,
+      status: document.getElementById('member-status').value
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/api/members`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        const errMsg = errorData.errors ? Object.values(errorData.errors).flat().join(', ') : (errorData.message || 'Failed to save member.');
+        throw new Error(errMsg);
+      }
+
+      showToast(`Member "${payload.fullName}" registered successfully!`);
+      closeAddMemberModal();
+      loadMembers();
+      loadStats();
+    } catch (err) {
+      alert(`Error saving member: ${err.message}`);
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = `<span>Save Teen Record</span>`;
+    }
+  }
+
+  // 7. Bulk CSV Upload
+  function openBulkUploadModal() {
+    document.getElementById('csv-file-input').value = '';
+    document.getElementById('file-label').textContent = 'Click to select CSV file';
+    document.getElementById('bulk-upload-result').classList.add('hidden');
+    document.getElementById('bulk-upload-modal').classList.remove('hidden');
+  }
+
+  function closeBulkUploadModal() {
+    document.getElementById('bulk-upload-modal').classList.add('hidden');
+  }
+
+  function handleFileSelected(input) {
+    if (input.files && input.files[0]) {
+      document.getElementById('file-label').textContent = input.files[0].name;
+    }
+  }
+
+  function downloadCsvTemplate(e) {
+    e.preventDefault();
+    window.location.href = `${API_BASE}/api/members/template`;
+  }
+
+  function exportMembersCsv() {
+    const params = new URLSearchParams();
+    if (currentSearch) params.set('search', currentSearch);
+    if (currentStatus) params.set('status', currentStatus);
+    window.location.href = `${API_BASE}/api/members/export?${params.toString()}`;
+  }
+
+  async function handleBulkUpload(e) {
+    e.preventDefault();
+    const fileInput = document.getElementById('csv-file-input');
+    const resultBox = document.getElementById('bulk-upload-result');
+    const uploadBtn = document.getElementById('upload-csv-btn');
+
+    if (!fileInput.files || !fileInput.files[0]) {
+      alert('Please choose a .csv file first.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = `
+      <span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span>
+      <span>Uploading...</span>
+    `;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/members/bulk-upload`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      resultBox.classList.remove('hidden');
+
+      if (res.ok) {
+        resultBox.className = 'text-xs p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200';
+        resultBox.innerHTML = `
+          <p class="font-bold">Import Completed!</p>
+          <p class="mt-0.5">${data.successfulInserts} members imported successfully (${data.failedRows} failed / skipped).</p>
+        `;
+        showToast(`Imported ${data.successfulInserts} new teens!`);
+        loadMembers();
+        loadStats();
+      } else {
+        resultBox.className = 'text-xs p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200';
+        resultBox.innerHTML = `<p class="font-bold">Upload Failed</p><p>${data.message || 'Error processing file.'}</p>`;
+      }
+    } catch (err) {
+      resultBox.classList.remove('hidden');
+      resultBox.className = 'text-xs p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200';
+      resultBox.innerHTML = `<p class="font-bold">Error</p><p>${err.message}</p>`;
+    } finally {
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML = `<span>Start Upload</span>`;
+    }
+  }
+
+  // 8. Toast Helper
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const bg = type === 'info' ? 'bg-slate-900' : 'bg-emerald-600';
+    toast.className = `toast-anim pointer-events-auto px-4 py-3 rounded-2xl text-white text-xs font-semibold shadow-xl flex items-center gap-2 ${bg}`;
+    toast.innerHTML = `
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+      <span>${escapeHtml(message)}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  // Security Helper
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Initial Boot
+  window.addEventListener('DOMContentLoaded', () => {
+    checkApiHealth();
+    loadStats();
+    loadMembers();
+  });
+</script>
+</body></html>

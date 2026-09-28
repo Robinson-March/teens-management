@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # 1. PostgreSQL Database
+  # ==========================================
+  db:
+    image: postgres:16-alpine
+    container_name: teens-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-TeensChurchDb}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password_change_me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-TeensChurchDb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - teens-network
+
+  # ==========================================
+  # 2. .NET 10 Web API Backend
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: teens-backend
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB:-TeensChurchDb};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres_password_change_me}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - teens-network
+
+  # ==========================================
+  # 3. Static Nginx Frontend with API Proxy
+  # ==========================================
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: teens-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      - backend
+    networks:
+      - teens-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  teens-network:
+    driver: bridge
