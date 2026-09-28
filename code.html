@@ -220,6 +220,7 @@
 <th class="py-3 px-3">Academic Level</th>
 <th class="py-3 px-3">Church Unit</th>
 <th class="py-3 px-3">Service</th>
+<th class="py-3 px-3 text-right">Actions</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-slate-100 text-xs" id="members-table-body">
@@ -356,6 +357,11 @@
 <input id="member-phone" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. 0803 123 4567" type="tel">
 </div>
 
+<div id="edit-auth-section" class="hidden">
+<label class="block text-xs font-bold text-slate-700 mb-1">Security Code (Required for edits) <span class="text-rose-500">*</span></label>
+<input id="edit-auth-code" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Enter authorization code" type="password">
+</div>
+
 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
 <button class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 rounded-xl transition-colors" onclick="closeAddMemberModal()" type="button">
   Cancel
@@ -425,6 +431,7 @@
   let currentPage = 1;
   const pageSize = 10;
   let searchTimer = null;
+  let currentMembers = [];
 
   // 2. Health & Connection check on startup
   async function checkApiHealth() {
@@ -581,12 +588,13 @@
   function renderMembersTable(data) {
     const tbody = document.getElementById('members-table-body');
     const items = data.items || [];
+    currentMembers = items;
     const total = data.totalCount || 0;
 
     if (items.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="5" class="py-12 text-center text-slate-400">
+          <td colspan="6" class="py-12 text-center text-slate-400">
             <p class="font-bold text-slate-600 text-sm mb-1">No teen records found</p>
             <p class="text-xs">Try clearing your filters or register a new member profile.</p>
           </td>
@@ -629,6 +637,11 @@
           </td>
           <td class="py-3.5 px-3 text-slate-600 font-medium">
             ${escapeHtml(m.serviceTime || '8:30 service')}
+          </td>
+          <td class="py-3.5 px-3 text-right">
+            <button onclick="openEditModal('${m.id}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition-colors" title="Edit Member">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+            </button>
           </td>
         </tr>
       `;
@@ -691,11 +704,37 @@
     }, 250);
   }
 
-  // 6. Add Member Modal & Submission
+  // 6. Add/Edit Member Modal & Submission
   function openAddMemberModal() {
     document.getElementById('add-member-form').reset();
     document.getElementById('member-edit-id').value = '';
+    document.getElementById('edit-auth-section').classList.add('hidden');
+    document.getElementById('edit-auth-code').removeAttribute('required');
     document.getElementById('modal-title').textContent = 'Register New Teen Member';
+    document.getElementById('add-member-modal').classList.remove('hidden');
+  }
+
+  function openEditModal(id) {
+    const member = currentMembers.find(m => m.id === id);
+    if (!member) return;
+
+    document.getElementById('add-member-form').reset();
+    document.getElementById('member-edit-id').value = member.id;
+    document.getElementById('edit-auth-section').classList.remove('hidden');
+    document.getElementById('edit-auth-code').setAttribute('required', 'true');
+    document.getElementById('edit-auth-code').value = '';
+    document.getElementById('modal-title').textContent = 'Edit Teen Member';
+
+    // Populate fields
+    document.getElementById('member-fullname').value = member.fullName || '';
+    document.getElementById('member-age').value = member.age || '';
+    if (member.academicLevel) document.getElementById('member-academic').value = member.academicLevel;
+    if (member.departments) document.getElementById('member-department').value = member.departments;
+    if (member.serviceTime) document.getElementById('member-service').value = member.serviceTime;
+    document.getElementById('member-guardian').value = member.guardianName || '';
+    document.getElementById('member-phone').value = member.phoneNumber || '';
+    if (member.status) document.getElementById('member-status').value = member.status;
+
     document.getElementById('add-member-modal').classList.remove('hidden');
   }
 
@@ -724,14 +763,32 @@
       status: document.getElementById('member-status').value
     };
 
+    const id = document.getElementById('member-edit-id').value;
+    const authCode = document.getElementById('edit-auth-code').value;
+
     try {
-      const res = await fetch(`${API_BASE}/api/members`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      let res;
+      if (id) {
+        // Edit mode (PUT)
+        res = await fetch(`${API_BASE}/api/members/${id}`, {
+          method: 'PUT',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Delete-Code': authCode
+          },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        // Add mode (POST)
+        res = await fetch(`${API_BASE}/api/members`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
 
       if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error("Invalid authorization code.");
         const errorData = await res.json().catch(() => ({}));
         const errMsg = errorData.errors ? Object.values(errorData.errors).flat().join(', ') : (errorData.message || 'Failed to save member.');
         throw new Error(errMsg);
@@ -742,7 +799,7 @@
       loadMembers();
       loadStats();
     } catch (err) {
-      alert(`Error saving member: ${err.message}`);
+      showToast(`Error saving member: ${err.message}`, 'error');
     } finally {
       saveBtn.disabled = false;
       saveBtn.innerHTML = `<span>Save Teen Record</span>`;
@@ -824,7 +881,7 @@
       loadMembers();
       loadStats();
     } catch (err) {
-      alert(err.message);
+      showToast(err.message, 'error');
     } finally {
       btn.disabled = false;
       btn.innerHTML = `<span>Confirm Delete</span>`;
@@ -868,7 +925,7 @@
     const uploadBtn = document.getElementById('upload-csv-btn');
 
     if (!fileInput.files || !fileInput.files[0]) {
-      alert('Please choose a .csv file first.');
+      showToast('Please choose a .csv file first.', 'error');
       return;
     }
 
@@ -917,10 +974,21 @@
   function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    const bg = type === 'info' ? 'bg-slate-900' : 'bg-emerald-600';
+    
+    let bg = 'bg-emerald-600';
+    let icon = '<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>';
+    
+    if (type === 'info') {
+      bg = 'bg-slate-900';
+      icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+    } else if (type === 'error') {
+      bg = 'bg-rose-600';
+      icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>';
+    }
+
     toast.className = `toast-anim pointer-events-auto px-4 py-3 rounded-2xl text-white text-xs font-semibold shadow-xl flex items-center gap-2 ${bg}`;
     toast.innerHTML = `
-      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icon}</svg>
       <span>${escapeHtml(message)}</span>
     `;
     container.appendChild(toast);

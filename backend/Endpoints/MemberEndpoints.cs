@@ -188,9 +188,17 @@ public static class MemberEndpoints
         group.MapPut("/{id:guid}", async (
             Guid id,
             UpdateMemberDto dto,
+            [FromHeader(Name = "X-Delete-Code")] string? code,
+            IConfiguration config,
             IValidator<UpdateMemberDto> validator,
             AppDbContext db) =>
         {
+            var expectedCode = config["DeleteCode"];
+            if (string.IsNullOrEmpty(expectedCode) || code != expectedCode)
+            {
+                return Results.Unauthorized();
+            }
+
             var validation = await validator.ValidateAsync(dto);
             if (!validation.IsValid)
             {
