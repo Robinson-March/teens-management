@@ -243,6 +243,33 @@ public static class MemberEndpoints
         .WithName("DeleteMember")
         .WithSummary("Remove a member from the database.");
 
+        // 6.5 POST /api/members/bulk-delete - Remove multiple members
+        group.MapPost("/bulk-delete", async ([FromBody] List<Guid> ids, [FromHeader(Name = "X-Delete-Code")] string? code, IConfiguration config, AppDbContext db) =>
+        {
+            var expectedCode = config["DeleteCode"];
+            if (string.IsNullOrEmpty(expectedCode) || code != expectedCode)
+            {
+                return Results.Unauthorized();
+            }
+
+            if (ids == null || !ids.Any())
+            {
+                return Results.BadRequest(new { message = "No member IDs provided." });
+            }
+
+            var members = await db.Members.Where(m => ids.Contains(m.Id)).ToListAsync();
+            if (!members.Any())
+            {
+                return Results.NotFound(new { message = "No matching members found." });
+            }
+
+            db.Members.RemoveRange(members);
+            await db.SaveChangesAsync();
+            return Results.Ok(new { count = members.Count });
+        })
+        .WithName("BulkDeleteMembers")
+        .WithSummary("Remove multiple members from the database.");
+
         // 7. POST /api/members/bulk-upload - Bulk CSV upload
         group.MapPost("/bulk-upload", async (
             IFormFile? file,

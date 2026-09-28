@@ -192,6 +192,10 @@
 <!-- Pill toggle tabs removed -->
 <!-- Search Input & Quick Filter -->
 <div class="flex items-center gap-3">
+<button onclick="openBulkDeleteModal()" class="hidden p-2 bg-rose-50 border border-rose-200 text-rose-600 hover:text-rose-700 hover:bg-rose-100 rounded-lg text-xs font-bold transition-colors items-center gap-2" id="bulk-delete-btn" title="Delete Selected" type="button">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+  <span id="bulk-delete-count">Delete (0)</span>
+</button>
 <div class="relative w-full sm:w-64">
 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -209,11 +213,13 @@
 <table class="w-full text-left border-collapse" id="members-table">
 <thead>
 <tr class="text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+<th class="py-3 px-3 w-10 text-center">
+  <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500">
+</th>
 <th class="py-3 px-3">Teen Member &amp; Contact</th>
 <th class="py-3 px-3">Academic Level</th>
 <th class="py-3 px-3">Church Unit</th>
 <th class="py-3 px-3">Service</th>
-<th class="py-3 px-3 text-right">Actions</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-slate-100 text-xs" id="members-table-body">
@@ -580,7 +586,7 @@
     if (items.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="4" class="py-12 text-center text-slate-400">
+          <td colspan="5" class="py-12 text-center text-slate-400">
             <p class="font-bold text-slate-600 text-sm mb-1">No teen records found</p>
             <p class="text-xs">Try clearing your filters or register a new member profile.</p>
           </td>
@@ -597,6 +603,9 @@
 
       return `
         <tr class="hover:bg-slate-50/70 transition-colors group member-row" data-id="${m.id}">
+          <td class="py-3.5 px-3 text-center">
+            <input type="checkbox" class="member-checkbox w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500" value="${m.id}" onchange="handleSelectionChange()">
+          </td>
           <td class="py-3.5 px-3">
             <div class="flex items-center gap-3">
               <div class="w-8 h-8 rounded-full ${unitStyle.iconBg} flex items-center justify-center shrink-0 border">
@@ -621,11 +630,6 @@
           <td class="py-3.5 px-3 text-slate-600 font-medium">
             ${escapeHtml(m.serviceTime || '8:30 service')}
           </td>
-          <td class="py-3.5 px-3 text-right">
-            <button onclick="openDeleteModal('${m.id}')" class="text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 p-1.5 rounded-lg transition-colors" title="Delete Member">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-            </button>
-          </td>
         </tr>
       `;
     }).join('');
@@ -637,6 +641,11 @@
 
     // Pagination buttons
     renderPaginationButtons(data.totalPages || 1, data.page);
+    
+    // Reset selection state for the new page
+    const selectAll = document.getElementById('select-all-checkbox');
+    if (selectAll) selectAll.checked = false;
+    handleSelectionChange();
   }
 
   function renderPaginationButtons(totalPages, activePage) {
@@ -740,10 +749,39 @@
     }
   }
 
-  // 6.5 Delete Member
-  function openDeleteModal(id) {
+  // 6.5 Bulk Delete Member
+  let selectedIds = [];
+
+  function toggleSelectAll(checkbox) {
+    const checkboxes = document.querySelectorAll('.member-checkbox');
+    checkboxes.forEach(cb => {
+      cb.checked = checkbox.checked;
+    });
+    handleSelectionChange();
+  }
+
+  function handleSelectionChange() {
+    const checkboxes = document.querySelectorAll('.member-checkbox:checked');
+    selectedIds = Array.from(checkboxes).map(cb => cb.value);
+    
+    const btn = document.getElementById('bulk-delete-btn');
+    const count = document.getElementById('bulk-delete-count');
+    
+    if (selectedIds.length > 0) {
+      btn.classList.remove('hidden');
+      btn.classList.add('inline-flex');
+      count.textContent = `Delete (${selectedIds.length})`;
+    } else {
+      btn.classList.add('hidden');
+      btn.classList.remove('inline-flex');
+      const selectAll = document.getElementById('select-all-checkbox');
+      if (selectAll) selectAll.checked = false;
+    }
+  }
+
+  function openBulkDeleteModal() {
+    if (selectedIds.length === 0) return;
     document.getElementById('delete-member-form').reset();
-    document.getElementById('delete-member-id').value = id;
     document.getElementById('delete-member-modal').classList.remove('hidden');
   }
 
@@ -753,7 +791,6 @@
 
   async function handleDeleteMember(e) {
     e.preventDefault();
-    const id = document.getElementById('delete-member-id').value;
     const code = document.getElementById('delete-auth-code').value;
     const btn = document.getElementById('confirm-delete-btn');
     
@@ -764,19 +801,25 @@
     `;
 
     try {
-      const res = await fetch(`${API_BASE}/api/members/${id}`, {
-        method: 'DELETE',
+      const res = await fetch(`${API_BASE}/api/members/bulk-delete`, {
+        method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           'X-Delete-Code': code
-        }
+        },
+        body: JSON.stringify(selectedIds)
       });
 
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) throw new Error("Invalid authorization code.");
-        throw new Error('Failed to delete member.');
+        throw new Error('Failed to delete members.');
       }
 
-      showToast('Member deleted successfully.');
+      showToast(`${selectedIds.length} members deleted successfully.`);
+      selectedIds = [];
+      const selectAll = document.getElementById('select-all-checkbox');
+      if (selectAll) selectAll.checked = false;
+      handleSelectionChange();
       closeDeleteModal();
       loadMembers();
       loadStats();
