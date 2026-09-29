@@ -196,6 +196,31 @@ public static class MemberEndpoints
             };
 
             db.Members.Add(member);
+
+            if (!string.IsNullOrWhiteSpace(member.Departments))
+            {
+                var unitTokens = member.Departments.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var token in unitTokens)
+                {
+                    var unitName = token.Trim();
+                    if (!string.IsNullOrWhiteSpace(unitName))
+                    {
+                        var lower = unitName.ToLowerInvariant();
+                        var unitExists = await db.Units.AnyAsync(u => u.Name.ToLower() == lower);
+                        if (!unitExists)
+                        {
+                            db.Units.Add(new ChurchUnit
+                            {
+                                Id = Guid.NewGuid(),
+                                Name = unitName,
+                                BadgeColor = "purple",
+                                CreatedAt = DateTime.UtcNow
+                            });
+                        }
+                    }
+                }
+            }
+
             await db.SaveChangesAsync();
 
             return Results.Created($"/api/members/{member.Id}", member);
@@ -240,6 +265,30 @@ public static class MemberEndpoints
             if (!string.IsNullOrWhiteSpace(dto.Status))
             {
                 member.Status = dto.Status.Trim();
+            }
+
+            if (!string.IsNullOrWhiteSpace(member.Departments))
+            {
+                var unitTokens = member.Departments.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var token in unitTokens)
+                {
+                    var unitName = token.Trim();
+                    if (!string.IsNullOrWhiteSpace(unitName))
+                    {
+                        var lower = unitName.ToLowerInvariant();
+                        var unitExists = await db.Units.AnyAsync(u => u.Name.ToLower() == lower);
+                        if (!unitExists)
+                        {
+                            db.Units.Add(new ChurchUnit
+                            {
+                                Id = Guid.NewGuid(),
+                                Name = unitName,
+                                BadgeColor = "purple",
+                                CreatedAt = DateTime.UtcNow
+                            });
+                        }
+                    }
+                }
             }
 
             await db.SaveChangesAsync();

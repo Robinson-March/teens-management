@@ -186,18 +186,7 @@ public class CsvImportService : ICsvImportService
                     !string.Equals(rawDept, "n/a", StringComparison.OrdinalIgnoreCase) &&
                     rawDept != "-")
                 {
-                    if (string.Equals(rawDept, "Choir (wants to learn)", StringComparison.OrdinalIgnoreCase))
-                    {
-                        parsedDept = "Choir";
-                    }
-                    else
-                    {
-                        parsedDept = rawDept;
-                    }
-                }
-                else
-                {
-                    parsedDept = "General Assembly";
+                    parsedDept = rawDept;
                 }
 
                 var member = new Member
@@ -236,6 +225,45 @@ public class CsvImportService : ICsvImportService
                 await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
                 try
                 {
+                    // Dynamically discover and register new units from imported records
+                    var existingUnitNames = await _context.Units
+                        .Select(u => u.Name.ToLower())
+                        .ToListAsync(cancellationToken);
+
+                    var colorPalette = new[] { "purple", "blue", "emerald", "amber", "rose", "indigo", "sky", "teal", "orange", "pink" };
+                    int colorIdx = existingUnitNames.Count;
+                    var newUnits = new List<ChurchUnit>();
+
+                    foreach (var member in validMembers)
+                    {
+                        if (string.IsNullOrWhiteSpace(member.Departments)) continue;
+
+                        var unitTokens = member.Departments.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var token in unitTokens)
+                        {
+                            var unitName = token.Trim();
+                            if (string.IsNullOrWhiteSpace(unitName)) continue;
+                            var lower = unitName.ToLowerInvariant();
+                            if (!existingUnitNames.Contains(lower))
+                            {
+                                existingUnitNames.Add(lower);
+                                newUnits.Add(new ChurchUnit
+                                {
+                                    Id = Guid.NewGuid(),
+                                    Name = unitName,
+                                    BadgeColor = colorPalette[colorIdx % colorPalette.Length],
+                                    CreatedAt = DateTime.UtcNow
+                                });
+                                colorIdx++;
+                            }
+                        }
+                    }
+
+                    if (newUnits.Count > 0)
+                    {
+                        await _context.Units.AddRangeAsync(newUnits, cancellationToken);
+                    }
+
                     await _context.Members.AddRangeAsync(validMembers, cancellationToken);
                     await _context.SaveChangesAsync(cancellationToken);
                     await transaction.CommitAsync(cancellationToken);

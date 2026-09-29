@@ -448,16 +448,10 @@
 <!-- BEGIN: SettingsPageView -->
 <div id="view-settings" class="flex flex-col hidden space-y-6">
   <!-- Settings Header -->
-  <header class="flex flex-col sm:flex-row sm:items-center pb-4 gap-4 justify-between border-b border-slate-200/80" data-purpose="settings-page-header">
+  <header class="flex items-center pb-4 justify-between border-b border-slate-200/80" data-purpose="settings-page-header">
     <div>
-      <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
-          <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          System &amp; Administration
-        </span>
-      </div>
-      <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">System Settings</h1>
-      <p class="text-xs text-slate-500 font-medium">Manage data backups, system health, cohort rules, and database maintenance</p>
+      <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Settings</h1>
+      <p class="text-xs text-slate-500 font-medium">Database maintenance and administration</p>
     </div>
     <div class="flex items-center gap-2.5">
       <button onclick="switchMainView('dashboard')" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-xs transition-all active:scale-95" type="button" title="Return to Dashboard">
@@ -467,148 +461,23 @@
     </div>
   </header>
 
-  <!-- Settings Grid Layout -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-    <!-- Card 1: System Info & Database Status -->
-    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-card-soft space-y-4">
-      <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-slate-800">System Information</h2>
-          <p class="text-[11px] text-slate-400">Environment &amp; database connectivity</p>
-        </div>
+  <!-- Clean Minimalist Reset Card -->
+  <div class="max-w-md mx-auto w-full pt-8">
+    <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-card-soft text-center space-y-4">
+      <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto border border-rose-200 shadow-xs">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
       </div>
-
-      <div class="space-y-3 text-xs">
-        <div class="flex justify-between items-center py-1.5 border-b border-slate-50">
-          <span class="text-slate-500 font-medium">Application</span>
-          <span class="font-bold text-slate-800">Teens Church Management v2.4</span>
-        </div>
-        <div class="flex justify-between items-center py-1.5 border-b border-slate-50">
-          <span class="text-slate-500 font-medium">Backend Architecture</span>
-          <span class="font-semibold text-slate-700 font-mono text-[11px]">.NET 10 Minimal APIs</span>
-        </div>
-        <div class="flex justify-between items-center py-1.5 border-b border-slate-50">
-          <span class="text-slate-500 font-medium">Database Engine</span>
-          <span class="font-semibold text-slate-700">SQLite + Entity Framework Core</span>
-        </div>
-        <div class="flex justify-between items-center py-1.5 border-b border-slate-50">
-          <span class="text-slate-500 font-medium">API Health Status</span>
-          <span id="settings-api-status" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            Connected
-          </span>
-        </div>
-        <div class="flex justify-between items-center py-1.5">
-          <span class="text-slate-500 font-medium">Total Indexed Records</span>
-          <span id="settings-record-counts" class="font-bold text-blue-600">--</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 2: Data Export & Backup -->
-    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-card-soft space-y-4">
-      <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-slate-800">Data Backup &amp; Export</h2>
-          <p class="text-[11px] text-slate-400">Export active database snapshot</p>
-        </div>
-      </div>
-
-      <p class="text-xs text-slate-500 leading-relaxed">
-        Download a complete, unformatted CSV backup of all current teen records, academic levels, departments, and contacts before running administrative resets or major imports.
-      </p>
-
-      <div class="pt-2">
-        <button onclick="exportMembersCsv()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-95" type="button">
-          <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          <span>Download Member Roster (CSV)</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Card 3: Academic Level Classification Breakdown -->
-    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-card-soft space-y-4">
-      <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-slate-800">Academic Cohorts</h2>
-          <p class="text-[11px] text-slate-400">Automated classification rules</p>
-        </div>
-      </div>
-
-      <p class="text-xs text-slate-500 leading-relaxed">
-        The system automatically normalizes diverse school formats (e.g. <i>"SS 3"</i>, <i>"JSS 2"</i>, <i>"Pre-Degree"</i>, <i>"100 Level"</i>) into standard church statistical categories:
-      </p>
-
-      <div class="grid grid-cols-2 gap-2 text-[11px]">
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <p class="font-bold text-slate-700">Junior Teens</p>
-          <p class="text-slate-400 text-[10px]">JSS1, JSS2</p>
-        </div>
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <p class="font-bold text-slate-700">Graduating JSS</p>
-          <p class="text-slate-400 text-[10px]">JSS3, Basic 9</p>
-        </div>
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <p class="font-bold text-slate-700">Senior Teens</p>
-          <p class="text-slate-400 text-[10px]">SS1</p>
-        </div>
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <p class="font-bold text-slate-700">Exam Classes</p>
-          <p class="text-slate-400 text-[10px]">SS2, SS3 (WAEC/JAMB)</p>
-        </div>
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <p class="font-bold text-slate-700">Pre-Varsity</p>
-          <p class="text-slate-400 text-[10px]">Awaiting Admission, JUPEB</p>
-        </div>
-        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <p class="font-bold text-slate-700">Tertiary / Vocation</p>
-          <p class="text-slate-400 text-[10px]">Undergraduates, Apprentices</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 4: Danger Zone (Clear Database) -->
-    <div class="bg-rose-50/60 rounded-2xl p-6 border border-rose-200/90 shadow-card-soft space-y-4">
-      <div class="flex items-center gap-3 pb-3 border-b border-rose-200/60">
-        <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-rose-900">Danger Zone</h2>
-          <p class="text-[11px] text-rose-600 font-medium">Irreversible database actions</p>
-        </div>
-      </div>
-
       <div>
-        <h3 class="text-xs font-bold text-slate-800">Clear All Teen Members (Reset Database)</h3>
+        <h2 class="text-base font-bold text-slate-800">Reset Database</h2>
         <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-          Permanently wipes all member profiles and contact details from the database so you can start afresh with a clean CSV import. Church units and departments are preserved.
+          Clear all teen records to start afresh with a clean database. Church units and departments are preserved.
         </p>
       </div>
-
-      <div class="p-3 bg-white/80 rounded-xl border border-rose-200/70 text-[11px] text-rose-800 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span>Protected action: Requires system authorization code before execution.</span>
-      </div>
-
-      <div class="pt-1">
-        <button onclick="openClearAllModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all active:scale-95" type="button">
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-          <span>Reset Database &amp; Clear All</span>
-        </button>
-      </div>
+      <button onclick="openClearAllModal()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all active:scale-95 flex items-center justify-center gap-2" type="button">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+        <span>Reset Database</span>
+      </button>
     </div>
-
   </div>
 </div>
 <!-- END: SettingsPageView -->
@@ -729,17 +598,7 @@
   <button type="button" onclick="openAddUnitModal()" class="text-[10px] text-purple-600 hover:text-purple-700 font-bold hover:underline flex items-center gap-1">+ New Unit</button>
 </div>
 <select id="member-department" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
-<option value="Sanctuary Keepers" selected>Sanctuary Keepers</option>
-<option value="Library">Library</option>
-<option value="Choir">Choir</option>
-<option value="Music">Music</option>
-<option value="Media">Media</option>
-<option value="Publicity">Publicity</option>
-<option value="Bible Study">Bible Study</option>
-<option value="Conducting">Conducting</option>
-<option value="Teens Ushering">Teens Ushering</option>
-<option value="Drama & Creative">Drama &amp; Creative</option>
-<option value="General Assembly">General Assembly (Undecided)</option>
+  <option value="">-- Select Church Unit --</option>
 </select>
 </div>
 <div>
@@ -868,17 +727,17 @@
           <div>
             <label class="block text-[11px] font-bold text-slate-600 mb-1">Badge Color Theme</label>
             <select id="unit-color" class="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
-              <option value="purple" selected>Purple (Choir &amp; Worship)</option>
-              <option value="indigo">Indigo (Band &amp; Music)</option>
-              <option value="blue">Blue (Media &amp; Tech)</option>
-              <option value="sky">Sky (Publicity &amp; Design)</option>
-              <option value="emerald">Emerald (Library &amp; Study)</option>
-              <option value="teal">Teal (Bible Study)</option>
-              <option value="amber">Amber (Sanctuary Keepers)</option>
-              <option value="orange">Orange (Ushering &amp; Hospitality)</option>
-              <option value="rose">Rose (Conducting / Drama)</option>
-              <option value="pink">Pink (Creative Arts)</option>
-              <option value="slate">Slate (General Assembly)</option>
+              <option value="purple" selected>Purple</option>
+              <option value="indigo">Indigo</option>
+              <option value="blue">Blue</option>
+              <option value="sky">Sky</option>
+              <option value="emerald">Emerald</option>
+              <option value="teal">Teal</option>
+              <option value="amber">Amber</option>
+              <option value="orange">Orange</option>
+              <option value="rose">Rose</option>
+              <option value="pink">Pink</option>
+              <option value="slate">Slate</option>
             </select>
           </div>
         </div>
@@ -950,17 +809,17 @@
     <div>
       <label class="block text-[11px] font-bold text-slate-600 mb-1" for="modal-add-unit-color">Badge Color Theme</label>
       <select id="modal-add-unit-color" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:bg-white focus:outline-none transition-all">
-        <option value="purple" selected>Purple (Choir &amp; Worship)</option>
-        <option value="indigo">Indigo (Band &amp; Music)</option>
-        <option value="blue">Blue (Media &amp; Tech)</option>
-        <option value="sky">Sky (Publicity &amp; Design)</option>
-        <option value="emerald">Emerald (Library &amp; Study)</option>
-        <option value="teal">Teal (Bible Study)</option>
-        <option value="amber">Amber (Sanctuary Keepers)</option>
-        <option value="orange">Orange (Ushering &amp; Hospitality)</option>
-        <option value="rose">Rose (Conducting / Drama)</option>
-        <option value="pink">Pink (Creative Arts)</option>
-        <option value="slate">Slate (General Assembly)</option>
+        <option value="purple" selected>Purple</option>
+        <option value="indigo">Indigo</option>
+        <option value="blue">Blue</option>
+        <option value="sky">Sky</option>
+        <option value="emerald">Emerald</option>
+        <option value="teal">Teal</option>
+        <option value="amber">Amber</option>
+        <option value="orange">Orange</option>
+        <option value="rose">Rose</option>
+        <option value="pink">Pink</option>
+        <option value="slate">Slate</option>
       </select>
     </div>
     <div>
@@ -1000,17 +859,17 @@
     <div>
       <label class="block text-[11px] font-bold text-slate-600 mb-1">Badge Color Theme</label>
       <select id="edit-unit-color" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
-        <option value="purple">Purple (Choir &amp; Worship)</option>
-        <option value="indigo">Indigo (Band &amp; Music)</option>
-        <option value="blue">Blue (Media &amp; Tech)</option>
-        <option value="sky">Sky (Publicity &amp; Design)</option>
-        <option value="emerald">Emerald (Library &amp; Study)</option>
-        <option value="teal">Teal (Bible Study)</option>
-        <option value="amber">Amber (Sanctuary Keepers)</option>
-        <option value="orange">Orange (Ushering &amp; Hospitality)</option>
-        <option value="rose">Rose (Conducting / Drama)</option>
-        <option value="pink">Pink (Creative Arts)</option>
-        <option value="slate">Slate (General Assembly)</option>
+        <option value="purple">Purple</option>
+        <option value="indigo">Indigo</option>
+        <option value="blue">Blue</option>
+        <option value="sky">Sky</option>
+        <option value="emerald">Emerald</option>
+        <option value="teal">Teal</option>
+        <option value="amber">Amber</option>
+        <option value="orange">Orange</option>
+        <option value="rose">Rose</option>
+        <option value="pink">Pink</option>
+        <option value="slate">Slate</option>
       </select>
     </div>
     <div>
@@ -1268,13 +1127,17 @@
 
       // Populate Department dropdowns in Add/Edit member modal
       const deptSelect = document.getElementById('member-department');
-      if (deptSelect && currentUnits.length > 0) {
+      if (deptSelect) {
         const curVal = deptSelect.value;
-        deptSelect.innerHTML = currentUnits.map(u => 
-          `<option value="${escapeHtml(u.name)}">${escapeHtml(u.name)}</option>`
-        ).join('');
-        if (curVal && currentUnits.some(u => u.name === curVal)) {
-          deptSelect.value = curVal;
+        if (currentUnits.length > 0) {
+          deptSelect.innerHTML = `<option value="">-- Select Church Unit --</option>` + currentUnits.map(u => 
+            `<option value="${escapeHtml(u.name)}">${escapeHtml(u.name)}</option>`
+          ).join('');
+          if (curVal && currentUnits.some(u => u.name === curVal)) {
+            deptSelect.value = curVal;
+          }
+        } else {
+          deptSelect.innerHTML = `<option value="">No units defined (click '+ New Unit')</option>`;
         }
       }
 
@@ -2103,7 +1966,21 @@
       academicSelect.value = '';
     }
 
-    if (member.departments) document.getElementById('member-department').value = member.departments;
+    const deptSelect = document.getElementById('member-department');
+    if (deptSelect) {
+      if (member.departments) {
+        deptSelect.value = member.departments;
+        if (!deptSelect.value && member.departments.trim()) {
+          const opt = document.createElement('option');
+          opt.value = member.departments;
+          opt.textContent = member.departments;
+          deptSelect.appendChild(opt);
+          deptSelect.value = member.departments;
+        }
+      } else {
+        deptSelect.value = '';
+      }
+    }
     if (member.serviceTime) document.getElementById('member-service').value = member.serviceTime;
     document.getElementById('member-guardian').value = member.guardianName || '';
     document.getElementById('member-phone').value = member.phoneNumber || '';
