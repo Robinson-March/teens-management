@@ -117,29 +117,37 @@ public class CsvImportService : ICsvImportService
                     {
                         parsedAge = null;
                     }
-                    else if (int.TryParse(rawAge, out int ageVal))
+                    else
                     {
-                        if (ageVal is < 1 or > 120)
+                        // Handle composite formats like "14/15" or "14-15"
+                        var candidate = rawAge.Split(new[] { '/', '-', ' ' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                        if (candidate != null && int.TryParse(candidate, out int ageVal))
+                        {
+                            if (ageVal is >= 1 and <= 120)
+                            {
+                                parsedAge = ageVal;
+                            }
+                            else
+                            {
+                                result.FailedRows++;
+                                result.Errors.Add(new BulkUploadError
+                                {
+                                    Row = rowNumber,
+                                    Reason = "Age value out of realistic range (1-120)."
+                                });
+                                continue;
+                            }
+                        }
+                        else
                         {
                             result.FailedRows++;
                             result.Errors.Add(new BulkUploadError
                             {
                                 Row = rowNumber,
-                                Reason = "Age value out of realistic range (1-120)."
+                                Reason = "Age format invalid (expected number)."
                             });
                             continue;
                         }
-                        parsedAge = ageVal;
-                    }
-                    else
-                    {
-                        result.FailedRows++;
-                        result.Errors.Add(new BulkUploadError
-                        {
-                            Row = rowNumber,
-                            Reason = "Age format invalid (expected number)."
-                        });
-                        continue;
                     }
                 }
 
@@ -148,14 +156,58 @@ public class CsvImportService : ICsvImportService
                     ? "8:30 service"
                     : record.ServiceTime.Trim();
 
+                // 4. Academic level normalization
+                string? parsedAcademicLevel = null;
+                if (!string.IsNullOrWhiteSpace(record.AcademicLevel))
+                {
+                    parsedAcademicLevel = AcademicLevelClassifier.NormalizeLevel(record.AcademicLevel);
+                }
+
+                // 5. Phone sanitization
+                string? parsedPhone = null;
+                var rawPhone = record.PhoneNumber?.Trim();
+                if (!string.IsNullOrWhiteSpace(rawPhone) &&
+                    !string.Equals(rawPhone, "Not Provided", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(rawPhone, "don't have", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(rawPhone, "none", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(rawPhone, "n/a", StringComparison.OrdinalIgnoreCase) &&
+                    rawPhone != "-")
+                {
+                    parsedPhone = rawPhone;
+                }
+
+                // 6. Department sanitization & default to General Assembly
+                string? parsedDept = null;
+                var rawDept = record.Departments?.Trim();
+                if (!string.IsNullOrWhiteSpace(rawDept) &&
+                    !string.Equals(rawDept, "Not Provided", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(rawDept, "Not Interested", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(rawDept, "none", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(rawDept, "n/a", StringComparison.OrdinalIgnoreCase) &&
+                    rawDept != "-")
+                {
+                    if (string.Equals(rawDept, "Choir (wants to learn)", StringComparison.OrdinalIgnoreCase))
+                    {
+                        parsedDept = "Choir";
+                    }
+                    else
+                    {
+                        parsedDept = rawDept;
+                    }
+                }
+                else
+                {
+                    parsedDept = "General Assembly";
+                }
+
                 var member = new Member
                 {
                     Id = Guid.NewGuid(),
                     FullName = fullName,
                     Age = parsedAge,
-                    PhoneNumber = string.IsNullOrWhiteSpace(record.PhoneNumber) ? null : record.PhoneNumber.Trim(),
-                    AcademicLevel = string.IsNullOrWhiteSpace(record.AcademicLevel) ? null : record.AcademicLevel.Trim(),
-                    Departments = string.IsNullOrWhiteSpace(record.Departments) ? null : record.Departments.Trim(),
+                    PhoneNumber = parsedPhone,
+                    AcademicLevel = parsedAcademicLevel,
+                    Departments = parsedDept,
                     ServiceTime = serviceTime,
                     GuardianName = string.IsNullOrWhiteSpace(record.GuardianName) ? null : record.GuardianName.Trim(),
                     Status = "active",

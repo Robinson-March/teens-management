@@ -124,6 +124,11 @@
   <p class="text-xs text-slate-500 font-medium">Member directory, academic tracking, and ministry assignments</p>
 </div>
 <div class="flex items-center gap-2.5">
+<!-- Manage Units button -->
+<button class="inline-flex items-center gap-2 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-xs transition-all active:scale-95" onclick="openUnitsModal()" type="button" title="Manage church units and departments">
+<svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+<span>Manage Units</span>
+</button>
 <!-- Import CSV button -->
 <button class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-xs transition-all active:scale-95" onclick="openBulkUploadModal()" type="button" title="Bulk import teens via CSV">
 <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -141,26 +146,29 @@
 <!-- END: HeaderBreadcrumbSection -->
 
 <!-- BEGIN: TopMetricKpiCards -->
-<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" data-purpose="kpi-stat-cards">
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6" data-purpose="kpi-stat-cards">
 <!-- Card 1: Solid Vibrant Blue (Total Registered) -->
-<article class="bg-blue-600 rounded-2xl p-5 text-center text-white shadow-sm flex flex-col justify-center items-center h-28 transform transition-transform hover:-translate-y-0.5">
-<span class="text-xs font-medium text-blue-100">Total Registered Teens</span>
-<p class="text-3xl font-extrabold tracking-tight mt-1 text-white" id="kpi-total-registered">--</p>
+<article class="bg-blue-600 rounded-2xl p-3.5 sm:p-5 text-center text-white shadow-sm flex flex-col justify-center items-center h-24 sm:h-28 transform transition-transform hover:-translate-y-0.5">
+<span class="text-[11px] sm:text-xs font-medium text-blue-100">Total Teens</span>
+<p class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight mt-1 text-white whitespace-nowrap" id="kpi-total-registered">--</p>
 </article>
 <!-- Card 2: Soft Pastel Lavender / Purple (Active Units) -->
-<article class="bg-[#f2e7fe] rounded-2xl p-5 text-center text-purple-950 shadow-xs flex flex-col justify-center items-center h-28 border border-purple-200/50 transform transition-transform hover:-translate-y-0.5">
-<span class="text-xs font-semibold text-purple-700/80">Active Church Units</span>
-<p class="text-3xl font-extrabold tracking-tight mt-1 text-purple-950" id="kpi-active-units">--</p>
+<article onclick="openUnitsModal()" class="cursor-pointer bg-[#f2e7fe] hover:bg-purple-100/90 rounded-2xl p-3.5 sm:p-5 text-center text-purple-950 shadow-xs flex flex-col justify-center items-center h-24 sm:h-28 border border-purple-200/50 transform transition-transform hover:-translate-y-0.5 transition-colors" title="Click to view & manage church units">
+<div class="flex items-center gap-1 justify-center">
+  <span class="text-[11px] sm:text-xs font-semibold text-purple-700/80">Active Units</span>
+  <svg class="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+</div>
+<p class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight mt-1 text-purple-950 whitespace-nowrap" id="kpi-active-units">--</p>
 </article>
 <!-- Card 3: Soft Pastel Pink / Blush (Average Age) -->
-<article class="bg-[#fce7f3] rounded-2xl p-5 text-center text-pink-950 shadow-xs flex flex-col justify-center items-center h-28 border border-pink-200/50 transform transition-transform hover:-translate-y-0.5">
-<span class="text-xs font-semibold text-pink-700/80">Average Youth Age</span>
-<p class="text-3xl font-extrabold tracking-tight mt-1 text-pink-950" id="kpi-average-age">--</p>
+<article class="bg-[#fce7f3] rounded-2xl p-3.5 sm:p-5 text-center text-pink-950 shadow-xs flex flex-col justify-center items-center h-24 sm:h-28 border border-pink-200/50 transform transition-transform hover:-translate-y-0.5">
+<span class="text-[11px] sm:text-xs font-semibold text-pink-700/80">Average Age</span>
+<p class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight mt-1 text-pink-950 whitespace-nowrap" id="kpi-average-age">--</p>
 </article>
 <!-- Card 4: Soft Pastel Mint / Light Lime (High School & Candidates) -->
-<article class="bg-[#ecfdf3] rounded-2xl p-5 text-center text-emerald-950 shadow-xs flex flex-col justify-center items-center h-28 border border-emerald-200/50 transform transition-transform hover:-translate-y-0.5">
-<span class="text-xs font-semibold text-emerald-800/80">Senior High &amp; WAEC/JAMB</span>
-<p class="text-3xl font-extrabold tracking-tight mt-1 text-emerald-950" id="kpi-senior-high">--</p>
+<article class="bg-[#ecfdf3] rounded-2xl p-3.5 sm:p-5 text-center text-emerald-950 shadow-xs flex flex-col justify-center items-center h-24 sm:h-28 border border-emerald-200/50 transform transition-transform hover:-translate-y-0.5">
+<span class="text-[11px] sm:text-xs font-semibold text-emerald-800/80">Senior High</span>
+<p class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight mt-1 text-emerald-950 whitespace-nowrap" id="kpi-senior-high">--</p>
 </article>
 </section>
 <!-- END: TopMetricKpiCards -->
@@ -187,32 +195,107 @@
 
 <!-- BEGIN: MemberDirectoryTableSection -->
 <section class="bg-white rounded-2xl p-6 border border-slate-100 shadow-card-soft" data-purpose="members-directory-table">
-<!-- Header Controls: Filter Pill Buttons + Search & Export -->
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-<!-- Pill toggle tabs -->
-<div class="inline-flex p-1 bg-slate-100/80 rounded-xl" role="tablist">
-<button aria-selected="true" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950" id="tab-active-btn" onclick="switchTab('active')" role="tab">
-  Active Members
-</button>
-<button aria-selected="false" class="px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all" id="tab-attention-btn" onclick="switchTab('attention')" role="tab">
-  Need Attention
-</button>
-<button aria-selected="false" class="px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all" id="tab-all-btn" onclick="switchTab('')" role="tab">
-  All Teens
-</button>
-</div>
-<!-- Search Input & Quick Filter -->
-<div class="flex items-center gap-3">
-<div class="relative w-full sm:w-64">
-<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-<input class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-400 font-medium" id="search-input" oninput="handleSearch(this.value)" placeholder="Search member, unit or class..." type="text">
-</div>
-<button onclick="exportMembersCsv()" class="p-2 border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-lg text-xs transition-colors" title="Export CSV" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</button>
-</div>
+<!-- Header Controls: Filter Tabs, Mobile Hamburger Menu + Search & Export -->
+<div class="flex flex-col gap-3 pb-5 border-b border-slate-100">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+    
+    <!-- Left Side: Desktop Status Tabs + Mobile Hamburger Button -->
+    <div class="flex items-center gap-2">
+      <!-- Mobile Hamburger Menu Button -->
+      <button id="mobile-tabs-menu-btn" onclick="toggleMobileTabsMenu()" class="md:hidden inline-flex items-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-all shadow-xs active:scale-95" type="button" aria-expanded="false" title="Toggle directory tabs &amp; filters">
+        <svg id="hamburger-icon" class="w-4 h-4 text-slate-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <span>Views:</span>
+        <span id="mobile-active-tab-label" class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full text-[10px] font-extrabold">All</span>
+      </button>
+
+      <!-- Desktop Pill Tabs -->
+      <div class="hidden md:flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/60" id="desktop-tabs-container">
+        <button onclick="setFilterStatus('')" id="tab-all-btn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-white text-blue-600" type="button">
+          All Teens <span id="tab-all-count" class="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold">--</span>
+        </button>
+        <button onclick="setFilterStatus('active')" id="tab-active-btn" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all" type="button">
+          Active <span id="tab-active-count" class="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200/70 text-slate-700 font-bold">--</span>
+        </button>
+        <button onclick="setFilterStatus('attention')" id="tab-attention-btn" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all" type="button">
+          Needs Attention <span id="tab-attention-count" class="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200/70 text-slate-700 font-bold">--</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Side: Bulk Actions, Search Input, Export & Clear DB -->
+    <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap sm:flex-nowrap">
+      <button onclick="openBulkDeleteModal()" class="hidden p-2 bg-rose-50 border border-rose-200 text-rose-600 hover:text-rose-700 hover:bg-rose-100 rounded-xl text-xs font-bold transition-colors items-center gap-2 shrink-0" id="bulk-delete-btn" title="Delete Selected" type="button">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        <span id="bulk-delete-count">Delete (0)</span>
+      </button>
+      
+      <div class="relative flex-1 sm:w-64">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </span>
+        <input class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-400 font-medium" id="search-input" oninput="handleSearch(this.value)" placeholder="Search member, unit or class..." type="text">
+      </div>
+
+      <button onclick="exportMembersCsv()" class="p-2 border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-xl text-xs transition-colors shrink-0" title="Export CSV" type="button">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+      </button>
+
+      <button onclick="openClearAllModal()" class="p-2 border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-colors shrink-0 flex items-center gap-1.5" title="Clear all members to start afresh" type="button">
+        <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        <span class="hidden sm:inline">Reset DB</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Slide-Down Hamburger Drawer for Tabs & Quick Actions -->
+  <div id="mobile-tabs-menu" class="hidden md:hidden bg-slate-50/95 border border-slate-200/90 rounded-2xl p-3.5 shadow-sm space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
+    <div>
+      <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2 px-1">Directory Filter Tabs</span>
+      <div class="grid grid-cols-1 gap-1.5">
+        <button onclick="setFilterStatus(''); toggleMobileTabsMenu();" id="mobile-tab-all" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold bg-white text-blue-600 shadow-xs border border-blue-100">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            <span>All Teen Members</span>
+          </div>
+          <span id="mobile-count-all" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold">--</span>
+        </button>
+        <button onclick="setFilterStatus('active'); toggleMobileTabsMenu();" id="mobile-tab-active" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white/70 hover:bg-white border border-slate-200/60">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Active Members</span>
+          </div>
+          <span id="mobile-count-active" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold">--</span>
+        </button>
+        <button onclick="setFilterStatus('attention'); toggleMobileTabsMenu();" id="mobile-tab-attention" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white/70 hover:bg-white border border-slate-200/60">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>Needs Attention</span>
+          </div>
+          <span id="mobile-count-attention" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-bold">--</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="pt-2 border-t border-slate-200/70">
+      <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2 px-1">Quick Actions</span>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="openAddMemberModal(); toggleMobileTabsMenu();" class="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-xs">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span>Add Member</span>
+        </button>
+        <button onclick="openUnitsModal(); toggleMobileTabsMenu();" class="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-purple-100 text-purple-800 text-xs font-bold border border-purple-200">
+          <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Manage Units</span>
+        </button>
+        <button onclick="openClearAllModal(); toggleMobileTabsMenu();" class="col-span-2 flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold border border-rose-200">
+          <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          <span>Clear All Members (Reset DB)</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Table / List Layout -->
@@ -220,16 +303,21 @@
 <table class="w-full text-left border-collapse" id="members-table">
 <thead>
 <tr class="text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+<th class="py-3 px-2 w-8 text-center">
+  <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500">
+</th>
+<th class="py-3 px-2 w-8 text-center font-mono text-[10px] text-slate-400">#</th>
 <th class="py-3 px-3">Teen Member &amp; Contact</th>
 <th class="py-3 px-3">Academic Level</th>
 <th class="py-3 px-3">Church Unit</th>
 <th class="py-3 px-3">Service</th>
+<th class="py-3 px-3 text-right">Actions</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-slate-100 text-xs" id="members-table-body">
 <!-- Populated dynamically by JavaScript -->
 <tr>
-  <td colspan="4" class="py-12 text-center text-slate-400">
+  <td colspan="7" class="py-12 text-center text-slate-400">
     <div class="inline-block animate-spin w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full mb-2"></div>
     <p>Loading members from Teens Church API...</p>
   </td>
@@ -240,8 +328,8 @@
 
 <!-- Table Pagination Footer -->
 <div class="flex flex-col sm:flex-row items-center justify-between pt-4 mt-2 border-t border-slate-100 text-xs text-slate-400 font-medium gap-3">
-<p id="pagination-info">Showing members...</p>
-<div class="flex items-center gap-1" id="pagination-buttons">
+<p id="pagination-info" class="text-center sm:text-left">Showing members...</p>
+<div class="w-full sm:w-auto flex justify-center" id="pagination-buttons">
   <!-- Dynamic buttons -->
 </div>
 </div>
@@ -251,6 +339,69 @@
 <!-- END: MainContentArea -->
 </main>
 <!-- END: MasterFloatingDashboardContainer -->
+
+<!-- BEGIN: ClearAllMembersModalDialog -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="clear-all-modal">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+<div class="text-center mb-6">
+<div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 border border-rose-200 shadow-xs">
+  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+</div>
+<h3 class="text-lg font-bold text-slate-800">Clear All Teen Members</h3>
+<p class="text-xs text-slate-500 mt-2 leading-relaxed">
+  Are you sure you want to delete <span class="font-bold text-rose-600">all teen records</span> from the database? This allows you to reset the database and start afresh with a clean CSV import.
+</p>
+<div class="mt-3 p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-[11px] text-rose-700 font-semibold flex items-center gap-2 text-left">
+  <svg class="w-4 h-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+  <span>Warning: This will permanently wipe all member records!</span>
+</div>
+</div>
+<form id="clear-all-form" onsubmit="handleClearAllMembers(event)">
+<div class="mb-5">
+  <label class="block text-xs font-bold text-slate-600 mb-1" for="clear-all-auth-code">Authorization Code</label>
+  <input class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-rose-500 focus:border-rose-500 px-3 py-2.5 transition-all outline-none" style="-webkit-text-security: disc; text-security: disc;" id="clear-all-auth-code" required type="text" placeholder="Enter authorization code..." autocomplete="off" data-lpignore="true">
+</div>
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all" onclick="closeClearAllModal()" type="button">
+  Cancel
+</button>
+<button id="confirm-clear-all-btn" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2" type="submit">
+  <span>Confirm Reset & Clear All</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- END: ClearAllMembersModalDialog -->
+
+<!-- BEGIN: DeleteMemberModalDialog -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="delete-member-modal">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+<div class="text-center mb-6">
+<div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+</div>
+<h3 class="text-lg font-bold text-slate-800">Delete Member</h3>
+<p class="text-xs text-slate-500 mt-2">Are you sure? This action cannot be undone. Enter the authorization code to proceed.</p>
+</div>
+<form id="delete-member-form" onsubmit="handleDeleteMember(event)">
+<input type="hidden" id="delete-member-id">
+<div class="mb-5">
+  <label class="block text-xs font-bold text-slate-600 mb-1" for="delete-auth-code">Authorization Code</label>
+  <input class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-rose-500 focus:border-rose-500 px-3 py-2.5 transition-all outline-none" style="-webkit-text-security: disc; text-security: disc;" id="delete-auth-code" required type="text" placeholder="Enter code..." autocomplete="off" data-lpignore="true">
+</div>
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all" onclick="closeDeleteModal()" type="button">
+  Cancel
+</button>
+<button id="confirm-delete-btn" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2" type="submit">
+  <span>Confirm Delete</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- END: DeleteMemberModalDialog -->
 
 <!-- BEGIN: AddMemberModalDialog -->
 <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="add-member-modal">
@@ -265,11 +416,11 @@
 </button>
 </div>
 
-<form class="space-y-4 mt-5" id="add-member-form" onsubmit="handleSaveMember(event)">
+<form class="space-y-4 mt-5" id="add-member-form" onsubmit="handleSaveMember(event)" autocomplete="off">
 <input type="hidden" id="member-edit-id" value="">
 <div>
 <label class="block text-xs font-bold text-slate-700 mb-1">Full Name <span class="text-rose-500">*</span></label>
-<input id="member-fullname" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. Samuel Adekunle" required type="text">
+<input id="member-fullname" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. Samuel Adekunle" required type="text" autocomplete="off">
 </div>
 <div class="grid grid-cols-2 gap-3">
 <div>
@@ -279,26 +430,38 @@
 <div>
 <label class="block text-xs font-bold text-slate-700 mb-1">Academic Class</label>
 <select id="member-academic" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
+<option value="">Not Specified / Undecided</option>
 <option value="Junior Secondary (JSS1)">JSS 1</option>
 <option value="Junior Secondary (JSS2)">JSS 2</option>
 <option value="Graduating JSS (JSS3)">JSS 3</option>
 <option value="Senior Secondary (SS1)">SSS 1</option>
 <option value="Senior Secondary (SS2)">SSS 2</option>
-<option value="Senior Secondary (SS3)" selected>SSS 3</option>
-<option value="Pre-Varsity (A-Level)">Pre-Varsity / Jambite</option>
+<option value="Senior Secondary (SS3)">SSS 3</option>
+<option value="Admission seeker">Admission Seeker / JAMB</option>
+<option value="Pre-Varsity (A-Level)">Pre-Varsity / Gap Year</option>
+<option value="Undergraduate (100L-400L)">Tertiary / Undergraduate</option>
+<option value="Working / Vocational">Working / Vocational</option>
 </select>
 </div>
 </div>
 
 <div class="grid grid-cols-2 gap-3">
 <div>
-<label class="block text-xs font-bold text-slate-700 mb-1">Assigned Ministry Unit</label>
+<div class="flex items-center justify-between mb-1">
+  <label class="block text-xs font-bold text-slate-700">Assigned Ministry Unit</label>
+  <button type="button" onclick="openUnitsModal()" class="text-[10px] text-purple-600 hover:text-purple-700 font-bold hover:underline">Manage</button>
+</div>
 <select id="member-department" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none">
-<option value="Media & Tech">Media &amp; Sound Tech</option>
-<option value="Choir & Vocals">Choir &amp; Vocals</option>
-<option value="Sanctuary Keepers">Sanctuary Keepers</option>
+<option value="Sanctuary Keepers" selected>Sanctuary Keepers</option>
+<option value="Library">Library</option>
+<option value="Choir">Choir</option>
+<option value="Music">Music</option>
+<option value="Media">Media</option>
+<option value="Publicity">Publicity</option>
+<option value="Bible Study">Bible Study</option>
+<option value="Conducting">Conducting</option>
 <option value="Teens Ushering">Teens Ushering</option>
-<option value="Drama & Creative">Drama &amp; Creative Arts</option>
+<option value="Drama & Creative">Drama &amp; Creative</option>
 <option value="General Assembly">General Assembly (Undecided)</option>
 </select>
 </div>
@@ -329,6 +492,11 @@
 <div>
 <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / Phone Contact</label>
 <input id="member-phone" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g. 0803 123 4567" type="tel">
+</div>
+
+<div id="edit-auth-section" class="hidden">
+<label class="block text-xs font-bold text-slate-700 mb-1">Security Code (Required for edits) <span class="text-rose-500">*</span></label>
+<input id="edit-auth-code" class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:outline-none" style="-webkit-text-security: disc; text-security: disc;" placeholder="Enter authorization code" type="text" autocomplete="off" data-lpignore="true">
 </div>
 
 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
@@ -388,6 +556,180 @@
 </div>
 <!-- END: BulkUploadModalDialog -->
 
+<!-- BEGIN: UnitsManagementModalDialog -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden" id="units-modal">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] flex flex-col">
+  <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-slate-800">Church Units &amp; Departments</h3>
+        <p class="text-xs text-slate-400">Add, edit, or remove ministry units</p>
+      </div>
+    </div>
+    <button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors" onclick="closeUnitsModal()">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+    </button>
+  </div>
+
+  <!-- Units List & Quick Add Container -->
+  <div class="overflow-y-auto flex-1 py-4 space-y-5">
+    <!-- Quick Add Unit Form -->
+    <div class="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
+      <h4 class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Add New Church Unit
+      </h4>
+      <form id="add-unit-form" onsubmit="handleSaveUnit(event)" class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Unit Name <span class="text-rose-500">*</span></label>
+            <input id="unit-name" required type="text" placeholder="e.g. Protocol &amp; Hospitality" class="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Badge Color Theme</label>
+            <select id="unit-color" class="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
+              <option value="purple" selected>Purple (Choir &amp; Worship)</option>
+              <option value="indigo">Indigo (Band &amp; Music)</option>
+              <option value="blue">Blue (Media &amp; Tech)</option>
+              <option value="sky">Sky (Publicity &amp; Design)</option>
+              <option value="emerald">Emerald (Library &amp; Study)</option>
+              <option value="teal">Teal (Bible Study)</option>
+              <option value="amber">Amber (Sanctuary Keepers)</option>
+              <option value="orange">Orange (Ushering &amp; Hospitality)</option>
+              <option value="rose">Rose (Conducting / Drama)</option>
+              <option value="pink">Pink (Creative Arts)</option>
+              <option value="slate">Slate (General Assembly)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Description (Optional)</label>
+          <input id="unit-desc" type="text" placeholder="Brief role of unit members" class="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
+        </div>
+        <div class="flex justify-end">
+          <button id="add-unit-btn" type="submit" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5">
+            <span>Add Unit</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Units Table -->
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="text-xs font-bold text-slate-700">Existing Units (<span id="units-count-badge">0</span>)</h4>
+        <span class="text-[10px] text-slate-400">Click edit to rename or customize badge color</span>
+      </div>
+      <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">
+              <th class="py-2.5 px-3">Unit</th>
+              <th class="py-2.5 px-3">Description</th>
+              <th class="py-2.5 px-3 text-center">Assigned Members</th>
+              <th class="py-2.5 px-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="units-table-body" class="divide-y divide-slate-100">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-3 border-t border-slate-100 flex justify-end">
+    <button onclick="closeUnitsModal()" type="button" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+      Close
+    </button>
+  </div>
+</div>
+</div>
+<!-- END: UnitsManagementModalDialog -->
+
+<!-- BEGIN: EditUnitSubModal -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-60 hidden" id="edit-unit-modal">
+<div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+  <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+    <h3 class="text-sm font-bold text-slate-800">Edit Church Unit</h3>
+    <button onclick="closeEditUnitModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+    </button>
+  </div>
+  <form id="edit-unit-form" onsubmit="handleUpdateUnit(event)" class="space-y-3 mt-4">
+    <input type="hidden" id="edit-unit-id">
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 mb-1">Unit Name <span class="text-rose-500">*</span></label>
+      <input id="edit-unit-name" required type="text" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
+      <p class="text-[10px] text-slate-400 mt-0.5">Renaming automatically updates all assigned teen records.</p>
+    </div>
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 mb-1">Badge Color Theme</label>
+      <select id="edit-unit-color" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
+        <option value="purple">Purple (Choir &amp; Worship)</option>
+        <option value="indigo">Indigo (Band &amp; Music)</option>
+        <option value="blue">Blue (Media &amp; Tech)</option>
+        <option value="sky">Sky (Publicity &amp; Design)</option>
+        <option value="emerald">Emerald (Library &amp; Study)</option>
+        <option value="teal">Teal (Bible Study)</option>
+        <option value="amber">Amber (Sanctuary Keepers)</option>
+        <option value="orange">Orange (Ushering &amp; Hospitality)</option>
+        <option value="rose">Rose (Conducting / Drama)</option>
+        <option value="pink">Pink (Creative Arts)</option>
+        <option value="slate">Slate (General Assembly)</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 mb-1">Description</label>
+      <input id="edit-unit-desc" type="text" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none">
+    </div>
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 mb-1">Authorization Code <span class="text-rose-500">*</span></label>
+      <input id="edit-unit-auth-code" required type="text" placeholder="Enter authorization code" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-purple-600 focus:outline-none" style="-webkit-text-security: disc; text-security: disc;" autocomplete="off" data-lpignore="true">
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" onclick="closeEditUnitModal()" class="px-3 py-1.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Cancel</button>
+      <button type="submit" id="save-edit-unit-btn" class="px-4 py-1.5 text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 rounded-xl shadow-xs">Save Changes</button>
+    </div>
+  </form>
+</div>
+</div>
+<!-- END: EditUnitSubModal -->
+
+<!-- BEGIN: DeleteUnitSubModal -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-60 hidden" id="delete-unit-modal">
+<div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+  <div class="text-center mb-4">
+    <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </div>
+    <h3 class="text-base font-bold text-slate-800">Delete Church Unit</h3>
+    <p id="delete-unit-warning" class="text-xs text-slate-500 mt-1">Are you sure you want to delete this unit?</p>
+  </div>
+  <form id="delete-unit-form" onsubmit="handleConfirmDeleteUnit(event)" class="space-y-3">
+    <input type="hidden" id="delete-unit-id">
+    <div id="delete-unit-force-wrap" class="hidden text-[11px] bg-amber-50 border border-amber-200 text-amber-800 p-2.5 rounded-xl">
+      <label class="flex items-start gap-2 cursor-pointer">
+        <input type="checkbox" id="delete-unit-force" class="mt-0.5 rounded text-amber-600 focus:ring-amber-500">
+        <span>Force removal: detach this unit from all assigned members.</span>
+      </label>
+    </div>
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 mb-1">Authorization Code <span class="text-rose-500">*</span></label>
+      <input id="delete-unit-auth-code" required type="text" placeholder="Enter authorization code" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-1 focus:ring-rose-600 focus:outline-none" style="-webkit-text-security: disc; text-security: disc;" autocomplete="off" data-lpignore="true">
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" onclick="closeDeleteUnitModal()" class="px-3 py-1.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Cancel</button>
+      <button type="submit" id="confirm-delete-unit-btn" class="px-4 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs">Confirm Delete</button>
+    </div>
+  </form>
+</div>
+</div>
+<!-- END: DeleteUnitSubModal -->
+
 <!-- Toast Notification Container -->
 <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -395,11 +737,27 @@
 <script>
   // 1. Base Configuration & State
   const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:5106' : '';
-  let currentStatus = 'active'; // 'active', 'attention', or '' (all)
+  let currentStatus = ''; // 'active', 'attention', or '' (all)
   let currentSearch = '';
   let currentPage = 1;
   const pageSize = 10;
   let searchTimer = null;
+  let currentMembers = [];
+  let currentUnits = [];
+
+  const BADGE_THEMES = {
+    purple: { bg: 'bg-purple-50 text-purple-700 border-purple-200', dot: 'bg-purple-600', iconBg: 'bg-purple-100 border-purple-200', text: 'text-purple-700', icon: '<span class="w-3.5 h-3.5 bg-purple-500 rotate-45 rounded-xs flex items-center justify-center"><span class="w-1.5 h-1.5 bg-white rounded-full"></span></span>' },
+    indigo: { bg: 'bg-indigo-50 text-indigo-700 border-indigo-200', dot: 'bg-indigo-600', iconBg: 'bg-indigo-100 border-indigo-200', text: 'text-indigo-700', icon: '<span class="text-indigo-700 text-[10px] font-bold">MU</span>' },
+    blue: { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-600', iconBg: 'bg-blue-100 border-blue-200', text: 'text-blue-700', icon: '<span class="w-4 h-4 rounded-full border-2 border-blue-600 flex items-center justify-center"><span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span></span>' },
+    sky: { bg: 'bg-sky-50 text-sky-700 border-sky-200', dot: 'bg-sky-600', iconBg: 'bg-sky-100 border-sky-200', text: 'text-sky-700', icon: '<span class="text-sky-700 text-[10px] font-bold">PB</span>' },
+    emerald: { bg: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-600', iconBg: 'bg-emerald-100 border-emerald-200', text: 'text-emerald-700', icon: '<span class="text-emerald-700 text-[10px] font-bold">LB</span>' },
+    teal: { bg: 'bg-teal-50 text-teal-700 border-teal-200', dot: 'bg-teal-600', iconBg: 'bg-teal-100 border-teal-200', text: 'text-teal-700', icon: '<span class="text-teal-700 text-[10px] font-bold">BS</span>' },
+    amber: { bg: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-600', iconBg: 'bg-amber-100 border-amber-200', text: 'text-amber-700', icon: '<span class="text-amber-700 text-xs font-black">SK</span>' },
+    orange: { bg: 'bg-orange-50 text-orange-700 border-orange-200', dot: 'bg-orange-600', iconBg: 'bg-orange-100 border-orange-200', text: 'text-orange-700', icon: '<span class="text-orange-700 text-[10px] font-bold">US</span>' },
+    rose: { bg: 'bg-rose-50 text-rose-700 border-rose-200', dot: 'bg-rose-600', iconBg: 'bg-rose-100 border-rose-200', text: 'text-rose-700', icon: '<span class="text-rose-700 text-[10px] font-bold">CD</span>' },
+    pink: { bg: 'bg-pink-50 text-pink-700 border-pink-200', dot: 'bg-pink-600', iconBg: 'bg-pink-100 border-pink-200', text: 'text-pink-700', icon: '<span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>' },
+    slate: { bg: 'bg-slate-50 text-slate-700 border-slate-200', dot: 'bg-slate-500', iconBg: 'bg-slate-100 border-slate-200', text: 'text-slate-600', icon: '<span class="text-slate-500 text-[10px] font-bold">TC</span>' }
+  };
 
   // 2. Health & Connection check on startup
   async function checkApiHealth() {
@@ -422,6 +780,261 @@
     }
   }
 
+  // 2.5 Church Units Management (Load, Add, Edit, Delete)
+  async function loadUnits() {
+    try {
+      const res = await fetch(`${API_BASE}/api/units`);
+      if (!res.ok) return;
+      const data = await res.json();
+      currentUnits = data;
+
+      const badge = document.getElementById('units-count-badge');
+      if (badge) badge.textContent = currentUnits.length;
+
+      // Populate Department dropdowns in Add/Edit member modal
+      const deptSelect = document.getElementById('member-department');
+      if (deptSelect && currentUnits.length > 0) {
+        const curVal = deptSelect.value;
+        deptSelect.innerHTML = currentUnits.map(u => 
+          `<option value="${escapeHtml(u.name)}">${escapeHtml(u.name)}</option>`
+        ).join('');
+        if (curVal && currentUnits.some(u => u.name === curVal)) {
+          deptSelect.value = curVal;
+        }
+      }
+
+      renderUnitsTable();
+    } catch (err) {
+      console.warn('Could not load units:', err);
+    }
+  }
+
+  function renderUnitsTable() {
+    const tbody = document.getElementById('units-table-body');
+    if (!tbody) return;
+
+    if (currentUnits.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="py-6 text-center text-slate-400">
+            No units found. Add your first church unit above.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = currentUnits.map(u => {
+      const theme = BADGE_THEMES[u.badgeColor] || BADGE_THEMES.purple;
+      return `
+        <tr class="hover:bg-slate-50/70 transition-colors">
+          <td class="py-3 px-3">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${theme.bg}">
+              <span class="w-2 h-2 rounded-full ${theme.dot}"></span>
+              ${escapeHtml(u.name)}
+            </span>
+          </td>
+          <td class="py-3 px-3 text-slate-500 text-[11px]">
+            ${escapeHtml(u.description || '—')}
+          </td>
+          <td class="py-3 px-3 text-center">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
+              ${u.memberCount ?? 0} teens
+            </span>
+          </td>
+          <td class="py-3 px-3 text-right">
+            <div class="flex items-center justify-end gap-1.5">
+              <button onclick="openEditUnitModal('${u.id}')" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit Unit">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+              </button>
+              <button onclick="openDeleteUnitModal('${u.id}')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete Unit">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function openUnitsModal() {
+    loadUnits();
+    document.getElementById('units-modal').classList.remove('hidden');
+  }
+
+  function closeUnitsModal() {
+    document.getElementById('units-modal').classList.add('hidden');
+  }
+
+  async function handleSaveUnit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('add-unit-btn');
+    const nameInput = document.getElementById('unit-name');
+    const colorInput = document.getElementById('unit-color');
+    const descInput = document.getElementById('unit-desc');
+
+    const name = nameInput.value.trim();
+    if (!name) return;
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span><span>Adding...</span>`;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/units`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          badgeColor: colorInput.value,
+          description: descInput.value.trim() || null
+        })
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to add unit.');
+      }
+
+      showToast(`Unit '${name}' added successfully!`);
+      nameInput.value = '';
+      descInput.value = '';
+      await loadUnits();
+      loadStats();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<span>Add Unit</span>`;
+    }
+  }
+
+  function openEditUnitModal(id) {
+    const unit = currentUnits.find(u => u.id === id);
+    if (!unit) return;
+
+    document.getElementById('edit-unit-form').reset();
+    document.getElementById('edit-unit-id').value = unit.id;
+    document.getElementById('edit-unit-name').value = unit.name;
+    document.getElementById('edit-unit-color').value = unit.badgeColor || 'purple';
+    document.getElementById('edit-unit-desc').value = unit.description || '';
+    document.getElementById('edit-unit-auth-code').value = '';
+    document.getElementById('edit-unit-modal').classList.remove('hidden');
+  }
+
+  function closeEditUnitModal() {
+    document.getElementById('edit-unit-modal').classList.add('hidden');
+  }
+
+  async function handleUpdateUnit(e) {
+    e.preventDefault();
+    const id = document.getElementById('edit-unit-id').value;
+    const name = document.getElementById('edit-unit-name').value.trim();
+    const color = document.getElementById('edit-unit-color').value;
+    const desc = document.getElementById('edit-unit-desc').value.trim();
+    const authCode = document.getElementById('edit-unit-auth-code').value;
+    const btn = document.getElementById('save-edit-unit-btn');
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span><span>Saving...</span>`;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/units/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Delete-Code': authCode
+        },
+        body: JSON.stringify({
+          name: name,
+          badgeColor: color,
+          description: desc || null
+        })
+      });
+
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error('Invalid authorization code.');
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || 'Failed to update unit.');
+      }
+
+      showToast(`Unit '${name}' updated successfully!`);
+      closeEditUnitModal();
+      await loadUnits();
+      loadMembers();
+      loadStats();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<span>Save Changes</span>`;
+    }
+  }
+
+  function openDeleteUnitModal(id) {
+    const unit = currentUnits.find(u => u.id === id);
+    if (!unit) return;
+
+    document.getElementById('delete-unit-form').reset();
+    document.getElementById('delete-unit-id').value = unit.id;
+    document.getElementById('delete-unit-auth-code').value = '';
+
+    const warning = document.getElementById('delete-unit-warning');
+    const forceWrap = document.getElementById('delete-unit-force-wrap');
+    const forceBox = document.getElementById('delete-unit-force');
+    forceBox.checked = false;
+
+    if (unit.memberCount > 0) {
+      warning.textContent = `Warning: '${unit.name}' currently has ${unit.memberCount} assigned member(s).`;
+      forceWrap.classList.remove('hidden');
+    } else {
+      warning.textContent = `Are you sure you want to delete unit '${unit.name}'? This cannot be undone.`;
+      forceWrap.classList.add('hidden');
+    }
+
+    document.getElementById('delete-unit-modal').classList.remove('hidden');
+  }
+
+  function closeDeleteUnitModal() {
+    document.getElementById('delete-unit-modal').classList.add('hidden');
+  }
+
+  async function handleConfirmDeleteUnit(e) {
+    e.preventDefault();
+    const id = document.getElementById('delete-unit-id').value;
+    const force = document.getElementById('delete-unit-force').checked;
+    const authCode = document.getElementById('delete-unit-auth-code').value;
+    const btn = document.getElementById('confirm-delete-unit-btn');
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span><span>Deleting...</span>`;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/units/${id}?force=${force}`, {
+        method: 'DELETE',
+        headers: {
+          'X-Delete-Code': authCode
+        }
+      });
+
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error('Invalid authorization code.');
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || 'Failed to delete unit.');
+      }
+
+      showToast('Unit deleted successfully!');
+      closeDeleteUnitModal();
+      await loadUnits();
+      loadMembers();
+      loadStats();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<span>Confirm Delete</span>`;
+    }
+  }
+
   // 3. Load Stats & KPI Cards + Academic Distribution
   async function loadStats() {
     try {
@@ -435,6 +1048,25 @@
       document.getElementById('kpi-average-age').textContent = `${stats.averageAge ?? 0} yrs`;
       document.getElementById('kpi-senior-high').textContent = stats.seniorHighAndCandidatesCount ?? 0;
 
+      // Update Tab Badges (Desktop & Mobile Hamburger Drawer)
+      const totalCount = stats.totalRegistered ?? 0;
+      const activeCount = stats.activeCount ?? 0;
+      const attentionCount = stats.attentionCount ?? 0;
+
+      const tabAllCount = document.getElementById('tab-all-count');
+      if (tabAllCount) tabAllCount.textContent = totalCount;
+      const tabActiveCount = document.getElementById('tab-active-count');
+      if (tabActiveCount) tabActiveCount.textContent = activeCount;
+      const tabAttentionCount = document.getElementById('tab-attention-count');
+      if (tabAttentionCount) tabAttentionCount.textContent = attentionCount;
+
+      const mobileCountAll = document.getElementById('mobile-count-all');
+      if (mobileCountAll) mobileCountAll.textContent = totalCount;
+      const mobileCountActive = document.getElementById('mobile-count-active');
+      if (mobileCountActive) mobileCountActive.textContent = activeCount;
+      const mobileCountAttention = document.getElementById('mobile-count-attention');
+      if (mobileCountAttention) mobileCountAttention.textContent = attentionCount;
+
       // Update Academic Distribution Bar & Legend
       renderAcademicDistribution(stats.academicDistribution || {});
     } catch (err) {
@@ -443,13 +1075,16 @@
   }
 
   function renderAcademicDistribution(dist) {
-    const colors = [
-      { key: 'Junior Teens (JSS1-2)', bg: 'bg-sky-200', text: 'text-sky-950', dot: 'bg-sky-200' },
-      { key: 'Graduating JSS (JSS3)', bg: 'bg-teal-300', text: 'text-teal-950', dot: 'bg-teal-300' },
-      { key: 'Senior Teens (SS1)', bg: 'bg-emerald-300', text: 'text-emerald-950', dot: 'bg-emerald-300' },
-      { key: 'Exam Class (SS2/SS3)', bg: 'bg-amber-300', text: 'text-amber-950', dot: 'bg-amber-300' },
-      { key: 'Pre-Varsity / Gap', bg: 'bg-purple-300', text: 'text-purple-950', dot: 'bg-purple-300' }
-    ];
+    const palette = {
+      'Junior Teens (JSS1-2)': { bg: 'bg-sky-300', dot: 'bg-sky-400' },
+      'Graduating JSS (JSS3)': { bg: 'bg-teal-300', dot: 'bg-teal-400' },
+      'Senior Teens (SS1)': { bg: 'bg-emerald-300', dot: 'bg-emerald-400' },
+      'Exam Class (SS2/SS3)': { bg: 'bg-amber-300', dot: 'bg-amber-400' },
+      'Admission / Pre-Varsity': { bg: 'bg-purple-300', dot: 'bg-purple-400' },
+      'Tertiary (Undergraduate)': { bg: 'bg-indigo-300', dot: 'bg-indigo-400' },
+      'Working / Vocational': { bg: 'bg-rose-300', dot: 'bg-rose-400' },
+      'Unspecified / Other': { bg: 'bg-slate-300', dot: 'bg-slate-400' }
+    };
 
     const labelsContainer = document.getElementById('academic-labels-container');
     const barContainer = document.getElementById('academic-segments-container');
@@ -459,28 +1094,38 @@
     barContainer.innerHTML = '';
     legendContainer.innerHTML = '';
 
-    colors.forEach(item => {
-      const pct = dist[item.key] ?? 0;
+    const entries = Object.entries(dist);
+    if (entries.length === 0) {
+      labelsContainer.innerHTML = '<span>No cohort data available</span>';
+      return;
+    }
 
-      // Label
-      const spanLabel = document.createElement('span');
-      spanLabel.className = 'font-bold';
-      spanLabel.textContent = `${pct}%`;
-      labelsContainer.appendChild(spanLabel);
+    entries.forEach(([key, pct]) => {
+      const theme = palette[key] || { bg: 'bg-slate-300', dot: 'bg-slate-400' };
+
+      // Top label for nonzero
+      if (pct > 0) {
+        const spanLabel = document.createElement('span');
+        spanLabel.className = 'font-bold';
+        spanLabel.textContent = `${pct}%`;
+        labelsContainer.appendChild(spanLabel);
+      }
 
       // Bar Segment
-      const segment = document.createElement('div');
-      segment.className = `h-full ${item.bg} transition-all duration-500`;
-      segment.style.width = `${Math.max(pct, 2)}%`;
-      segment.title = `${item.key}: ${pct}%`;
-      barContainer.appendChild(segment);
+      if (pct > 0) {
+        const segment = document.createElement('div');
+        segment.className = `h-full ${theme.bg} transition-all duration-500`;
+        segment.style.width = `${Math.max(pct, 2)}%`;
+        segment.title = `${key}: ${pct}%`;
+        barContainer.appendChild(segment);
+      }
 
       // Legend Item
       const legendItem = document.createElement('div');
       legendItem.className = 'flex items-center gap-1.5';
       legendItem.innerHTML = `
-        <span class="w-2.5 h-2.5 rounded-xs ${item.dot}"></span>
-        <span>${item.key} (${pct}%)</span>
+        <span class="w-2.5 h-2.5 rounded-xs ${theme.dot}"></span>
+        <span>${escapeHtml(key)} (${pct}%)</span>
       `;
       legendContainer.appendChild(legendItem);
     });
@@ -503,7 +1148,7 @@
     } catch (err) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="4" class="py-8 text-center text-rose-500 font-medium">
+          <td colspan="7" class="py-8 text-center text-rose-500 font-medium">
             Could not connect to backend server. Make sure API is running at ${API_BASE}.
           </td>
         </tr>
@@ -512,56 +1157,65 @@
   }
 
   function getUnitBadge(dept) {
-    const d = (dept || 'General Assembly').toLowerCase();
-    if (d.includes('media') || d.includes('sound')) {
-      return {
-        bg: 'bg-blue-50 text-blue-700 border-blue-100',
-        dot: 'bg-blue-600',
-        iconBg: 'bg-blue-100 border-blue-200',
-        icon: '<span class="w-4 h-4 rounded-full border-2 border-blue-600 flex items-center justify-center"><span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span></span>'
-      };
+    const raw = (dept || 'General Assembly').trim();
+    const d = raw.toLowerCase();
+
+    // 1. Exact match in currentUnits
+    const matched = currentUnits.find(u => u.name.toLowerCase() === d);
+    if (matched && BADGE_THEMES[matched.badgeColor]) {
+      return BADGE_THEMES[matched.badgeColor];
     }
-    if (d.includes('choir') || d.includes('vocal')) {
-      return {
-        bg: 'bg-purple-50 text-purple-700 border-purple-100',
-        dot: 'bg-purple-600',
-        iconBg: 'bg-purple-100 border-purple-200',
-        icon: '<span class="w-3.5 h-3.5 bg-purple-500 rotate-45 rounded-xs flex items-center justify-center"><span class="w-1.5 h-1.5 bg-white rounded-full"></span></span>'
-      };
+
+    // 2. Partial match in currentUnits
+    const partial = currentUnits.find(u => d.includes(u.name.toLowerCase()));
+    if (partial && BADGE_THEMES[partial.badgeColor]) {
+      return BADGE_THEMES[partial.badgeColor];
     }
-    if (d.includes('sanctuary') || d.includes('keeper')) {
-      return {
-        bg: 'bg-amber-50 text-amber-700 border-amber-100',
-        dot: 'bg-amber-500',
-        iconBg: 'bg-amber-100 border-amber-200',
-        icon: '<span class="text-amber-700 text-xs font-black">SK</span>'
-      };
+
+    // 3. Fallbacks
+    if (d.includes('media') || d.includes('sound')) return BADGE_THEMES.blue;
+    if (d.includes('publicity')) return BADGE_THEMES.sky;
+    if (d.includes('choir') || d.includes('vocal')) return BADGE_THEMES.purple;
+    if (d.includes('music') || d.includes('band')) return BADGE_THEMES.indigo;
+    if (d.includes('sanctuary') || d.includes('keeper')) return BADGE_THEMES.amber;
+    if (d.includes('library') || d.includes('book')) return BADGE_THEMES.emerald;
+    if (d.includes('bible study') || d.includes('bible')) return BADGE_THEMES.teal;
+    if (d.includes('conducting')) return BADGE_THEMES.rose;
+    if (d.includes('usher')) return BADGE_THEMES.orange;
+    if (d.includes('drama') || d.includes('creative')) return BADGE_THEMES.pink;
+
+    return BADGE_THEMES.slate;
+  }
+
+  function renderUnitBadges(departments) {
+    if (!departments || departments.trim() === '' || departments.toLowerCase() === 'not provided') {
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${BADGE_THEMES.slate.bg}"><span class="w-1.5 h-1.5 rounded-full ${BADGE_THEMES.slate.dot}"></span>General Assembly</span>`;
     }
-    if (d.includes('drama') || d.includes('creative')) {
-      return {
-        bg: 'bg-rose-50 text-rose-700 border-rose-100',
-        dot: 'bg-rose-500',
-        iconBg: 'bg-rose-100 border-rose-200',
-        icon: '<span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>'
-      };
+
+    const parts = departments.split(/[,;]/).map(s => s.trim()).filter(Boolean);
+    if (parts.length === 0) {
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${BADGE_THEMES.slate.bg}"><span class="w-1.5 h-1.5 rounded-full ${BADGE_THEMES.slate.dot}"></span>General Assembly</span>`;
     }
-    return {
-      bg: 'bg-slate-50 text-slate-700 border-slate-200',
-      dot: 'bg-slate-400',
-      iconBg: 'bg-slate-100 border-slate-200',
-      icon: '<span class="text-slate-500 text-[10px] font-bold">TC</span>'
-    };
+
+    return parts.map(part => {
+      const badge = getUnitBadge(part);
+      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badge.bg} mr-1 mb-1">
+        <span class="w-1.5 h-1.5 rounded-full ${badge.dot}"></span>
+        ${escapeHtml(part)}
+      </span>`;
+    }).join('');
   }
 
   function renderMembersTable(data) {
     const tbody = document.getElementById('members-table-body');
     const items = data.items || [];
+    currentMembers = items;
     const total = data.totalCount || 0;
 
     if (items.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="4" class="py-12 text-center text-slate-400">
+          <td colspan="7" class="py-12 text-center text-slate-400">
             <p class="font-bold text-slate-600 text-sm mb-1">No teen records found</p>
             <p class="text-xs">Try clearing your filters or register a new member profile.</p>
           </td>
@@ -572,35 +1226,57 @@
       return;
     }
 
-    tbody.innerHTML = items.map(m => {
-      const unitStyle = getUnitBadge(m.departments);
-      const guardianInfo = [m.guardianName ? `Guardian: ${escapeHtml(m.guardianName)}` : null, m.phoneNumber ? escapeHtml(m.phoneNumber) : null].filter(Boolean).join(' • ');
+    tbody.innerHTML = items.map((m, index) => {
+      const rowNum = (data.page - 1) * data.pageSize + index + 1;
+      const firstDept = (m.departments || '').split(/[,;]/)[0] || '';
+      const unitStyle = getUnitBadge(firstDept);
+
+      const contactItems = [];
+      if (m.guardianName) {
+        contactItems.push(`<span>Guardian: ${escapeHtml(m.guardianName)}</span>`);
+      }
+      if (m.phoneNumber) {
+        contactItems.push(`<span class="font-mono whitespace-nowrap text-slate-600">${escapeHtml(m.phoneNumber)}</span>`);
+      }
+      const contactInfo = contactItems.length > 0 
+        ? contactItems.join(' <span class="text-slate-300">•</span> ') 
+        : '<span class="italic text-slate-400">No contact specified</span>';
 
       return `
         <tr class="hover:bg-slate-50/70 transition-colors group member-row" data-id="${m.id}">
+          <td class="py-3 px-2 text-center">
+            <input type="checkbox" class="member-checkbox w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500" value="${m.id}" onchange="handleSelectionChange()">
+          </td>
+          <td class="py-3 px-2 text-center text-slate-400 font-mono text-[11px] font-semibold whitespace-nowrap">
+            ${rowNum}
+          </td>
           <td class="py-3.5 px-3">
             <div class="flex items-center gap-3">
               <div class="w-8 h-8 rounded-full ${unitStyle.iconBg} flex items-center justify-center shrink-0 border">
                 ${unitStyle.icon}
               </div>
-              <div>
-                <p class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">${escapeHtml(m.fullName)}</p>
-                <p class="text-[11px] text-slate-400 font-medium">${guardianInfo || 'No contact specified'}</p>
+              <div class="min-w-0">
+                <p class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors truncate">${escapeHtml(m.fullName)}</p>
+                <p class="text-[11px] text-slate-400 font-medium flex items-center flex-wrap gap-1">${contactInfo}</p>
               </div>
             </div>
           </td>
-          <td class="py-3.5 px-3 font-semibold text-slate-700">
+          <td class="py-3.5 px-3 font-semibold text-slate-700 whitespace-nowrap">
             ${escapeHtml(m.academicLevel || 'Not Specified')}
-            <span class="block text-[10px] text-slate-400 font-normal">Age: ${m.age ? m.age + ' yrs' : 'N/A'}</span>
+            <span class="block text-[10px] text-slate-400 font-normal font-mono whitespace-nowrap">Age: ${m.age ? m.age + ' yrs' : 'N/A'}</span>
           </td>
           <td class="py-3.5 px-3">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${unitStyle.bg}">
-              <span class="w-1.5 h-1.5 rounded-full ${unitStyle.dot}"></span>
-              ${escapeHtml(m.departments || 'General Assembly')}
-            </span>
+            <div class="flex flex-wrap items-center">
+              ${renderUnitBadges(m.departments)}
+            </div>
           </td>
-          <td class="py-3.5 px-3 text-slate-600 font-medium">
+          <td class="py-3.5 px-3 text-slate-600 font-medium whitespace-nowrap">
             ${escapeHtml(m.serviceTime || '8:30 service')}
+          </td>
+          <td class="py-3.5 px-3 text-right whitespace-nowrap">
+            <button onclick="openEditModal('${m.id}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition-colors inline-flex items-center justify-center" title="Edit Member">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+            </button>
           </td>
         </tr>
       `;
@@ -613,32 +1289,72 @@
 
     // Pagination buttons
     renderPaginationButtons(data.totalPages || 1, data.page);
+    
+    // Reset selection state for the new page
+    const selectAll = document.getElementById('select-all-checkbox');
+    if (selectAll) selectAll.checked = false;
+    handleSelectionChange();
   }
 
   function renderPaginationButtons(totalPages, activePage) {
     const container = document.getElementById('pagination-buttons');
+    if (!container) return;
     if (totalPages <= 1) {
       container.innerHTML = '';
       return;
     }
 
-    let html = `
-      <button onclick="changePage(${activePage - 1})" ${activePage <= 1 ? 'disabled class="px-2.5 py-1 rounded border border-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-600"'}>Prev</button>
+    // 1. Mobile Compact Pagination ([Prev] Page X of Y [Next]) - sm:hidden
+    const mobileHtml = `
+      <div class="flex sm:hidden items-center justify-between w-full gap-2 px-1">
+        <button onclick="changePage(${activePage - 1})" ${activePage <= 1 ? 'disabled class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-300 cursor-not-allowed text-xs font-semibold"' : 'class="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition-colors"'}>
+          &larr; Prev
+        </button>
+        <span class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-xl whitespace-nowrap font-mono">
+          Page ${activePage} of ${totalPages}
+        </span>
+        <button onclick="changePage(${activePage + 1})" ${activePage >= totalPages ? 'disabled class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-300 cursor-not-allowed text-xs font-semibold"' : 'class="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition-colors"'}>
+          Next &rarr;
+        </button>
+      </div>
     `;
 
-    for (let p = 1; p <= totalPages; p++) {
-      if (p === activePage) {
-        html += `<button class="px-2.5 py-1 rounded bg-blue-600 text-white font-bold">${p}</button>`;
-      } else {
-        html += `<button onclick="changePage(${p})" class="px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-600">${p}</button>`;
+    // 2. Desktop Windowed Pagination (hidden sm:flex) - cleanly windowed so numbers never wrap
+    function getPageNumbers(total, current) {
+      if (total <= 7) {
+        return Array.from({ length: total }, (_, i) => i + 1);
       }
+      if (current <= 4) {
+        return [1, 2, 3, 4, 5, '...', total];
+      }
+      if (current >= total - 3) {
+        return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+      }
+      return [1, '...', current - 1, current, current + 1, '...', total];
     }
 
-    html += `
-      <button onclick="changePage(${activePage + 1})" ${activePage >= totalPages ? 'disabled class="px-2.5 py-1 rounded border border-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-600"'}>Next</button>
+    const pages = getPageNumbers(totalPages, activePage);
+    let desktopPagesHtml = '';
+
+    pages.forEach(p => {
+      if (p === '...') {
+        desktopPagesHtml += `<span class="px-2 py-1 text-slate-400 font-bold text-xs select-none">...</span>`;
+      } else if (p === activePage) {
+        desktopPagesHtml += `<button class="min-w-[32px] h-8 px-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs font-mono select-none">${p}</button>`;
+      } else {
+        desktopPagesHtml += `<button onclick="changePage(${p})" class="min-w-[32px] h-8 px-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs transition-colors font-mono select-none">${p}</button>`;
+      }
+    });
+
+    const desktopHtml = `
+      <div class="hidden sm:flex items-center gap-1">
+        <button onclick="changePage(${activePage - 1})" ${activePage <= 1 ? 'disabled class="h-8 px-3 rounded-xl border border-slate-100 text-slate-300 cursor-not-allowed text-xs font-medium"' : 'class="h-8 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-xs transition-colors"'}>Prev</button>
+        ${desktopPagesHtml}
+        <button onclick="changePage(${activePage + 1})" ${activePage >= totalPages ? 'disabled class="h-8 px-3 rounded-xl border border-slate-100 text-slate-300 cursor-not-allowed text-xs font-medium"' : 'class="h-8 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-xs transition-colors"'}>Next</button>
+      </div>
     `;
 
-    container.innerHTML = html;
+    container.innerHTML = mobileHtml + desktopHtml;
   }
 
   function changePage(page) {
@@ -647,32 +1363,73 @@
   }
 
   // 5. Tab & Search Filters
-  function switchTab(status) {
-    currentStatus = status;
+  function toggleMobileTabsMenu() {
+    const menu = document.getElementById('mobile-tabs-menu');
+    const btn = document.getElementById('mobile-tabs-menu-btn');
+    const icon = document.getElementById('hamburger-icon');
+    if (!menu) return;
+
+    const isHidden = menu.classList.contains('hidden');
+    if (isHidden) {
+      menu.classList.remove('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+      if (icon) {
+        icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
+      }
+    } else {
+      menu.classList.add('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+      if (icon) {
+        icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>`;
+      }
+    }
+  }
+
+  function setFilterStatus(status) {
+    currentStatus = status || '';
     currentPage = 1;
 
-    const btnActive = document.getElementById('tab-active-btn');
-    const btnAttention = document.getElementById('tab-attention-btn');
-    const btnAll = document.getElementById('tab-all-btn');
+    // Update Desktop Tabs UI
+    const tabAll = document.getElementById('tab-all-btn');
+    const tabActive = document.getElementById('tab-active-btn');
+    const tabAttention = document.getElementById('tab-attention-btn');
 
-    [btnActive, btnAttention, btnAll].forEach(b => {
-      b.className = 'px-4 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 transition-all';
-      b.setAttribute('aria-selected', 'false');
-    });
+    const activeDesktopClass = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-white text-blue-600';
+    const inactiveDesktopClass = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all';
 
-    if (status === 'active') {
-      btnActive.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
-      btnActive.setAttribute('aria-selected', 'true');
-    } else if (status === 'attention') {
-      btnAttention.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
-      btnAttention.setAttribute('aria-selected', 'true');
-    } else {
-      btnAll.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs bg-cyan-200 text-cyan-950';
-      btnAll.setAttribute('aria-selected', 'true');
+    if (tabAll && tabActive && tabAttention) {
+      tabAll.className = currentStatus === '' ? activeDesktopClass : inactiveDesktopClass;
+      tabActive.className = currentStatus === 'active' ? activeDesktopClass : inactiveDesktopClass;
+      tabAttention.className = currentStatus === 'attention' ? activeDesktopClass : inactiveDesktopClass;
+    }
+
+    // Update Mobile Tabs Label & Menu Active State
+    const labelMap = {
+      '': 'All',
+      'active': 'Active',
+      'attention': 'Attention'
+    };
+    const mobileLabel = document.getElementById('mobile-active-tab-label');
+    if (mobileLabel) {
+      mobileLabel.textContent = labelMap[currentStatus] || 'All';
+    }
+
+    const mobileTabAll = document.getElementById('mobile-tab-all');
+    const mobileTabActive = document.getElementById('mobile-tab-active');
+    const mobileTabAttention = document.getElementById('mobile-tab-attention');
+
+    const activeMobileClass = 'flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold bg-white text-blue-600 shadow-xs border border-blue-100';
+    const inactiveMobileClass = 'flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white/70 hover:bg-white border border-slate-200/60';
+
+    if (mobileTabAll && mobileTabActive && mobileTabAttention) {
+      mobileTabAll.className = currentStatus === '' ? activeMobileClass : inactiveMobileClass;
+      mobileTabActive.className = currentStatus === 'active' ? activeMobileClass : inactiveMobileClass;
+      mobileTabAttention.className = currentStatus === 'attention' ? activeMobileClass : inactiveMobileClass;
     }
 
     loadMembers();
   }
+
 
   function handleSearch(val) {
     clearTimeout(searchTimer);
@@ -683,11 +1440,53 @@
     }, 250);
   }
 
-  // 6. Add Member Modal & Submission
+  // 6. Add/Edit Member Modal & Submission
   function openAddMemberModal() {
     document.getElementById('add-member-form').reset();
     document.getElementById('member-edit-id').value = '';
+    document.getElementById('edit-auth-section').classList.add('hidden');
+    document.getElementById('edit-auth-code').removeAttribute('required');
     document.getElementById('modal-title').textContent = 'Register New Teen Member';
+    document.getElementById('add-member-modal').classList.remove('hidden');
+  }
+
+  function openEditModal(id) {
+    const member = currentMembers.find(m => m.id === id);
+    if (!member) return;
+
+    document.getElementById('add-member-form').reset();
+    document.getElementById('member-edit-id').value = member.id;
+    document.getElementById('edit-auth-section').classList.remove('hidden');
+    document.getElementById('edit-auth-code').setAttribute('required', 'true');
+    document.getElementById('edit-auth-code').value = '';
+    document.getElementById('modal-title').textContent = 'Edit Teen Member';
+
+    // Populate fields
+    document.getElementById('member-fullname').value = member.fullName || '';
+    document.getElementById('member-age').value = member.age || '';
+
+    const academicSelect = document.getElementById('member-academic');
+    if (member.academicLevel) {
+      const normalizedLevel = normalizeAcademicLevel(member.academicLevel);
+      academicSelect.value = normalizedLevel;
+      // If still not matched, dynamically append option to preserve exact value
+      if (!academicSelect.value && member.academicLevel.trim()) {
+        const opt = document.createElement('option');
+        opt.value = member.academicLevel;
+        opt.textContent = member.academicLevel;
+        academicSelect.appendChild(opt);
+        academicSelect.value = member.academicLevel;
+      }
+    } else {
+      academicSelect.value = '';
+    }
+
+    if (member.departments) document.getElementById('member-department').value = member.departments;
+    if (member.serviceTime) document.getElementById('member-service').value = member.serviceTime;
+    document.getElementById('member-guardian').value = member.guardianName || '';
+    document.getElementById('member-phone').value = member.phoneNumber || '';
+    if (member.status) document.getElementById('member-status').value = member.status;
+
     document.getElementById('add-member-modal').classList.remove('hidden');
   }
 
@@ -716,14 +1515,32 @@
       status: document.getElementById('member-status').value
     };
 
+    const id = document.getElementById('member-edit-id').value;
+    const authCode = document.getElementById('edit-auth-code').value;
+
     try {
-      const res = await fetch(`${API_BASE}/api/members`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      let res;
+      if (id) {
+        // Edit mode (PUT)
+        res = await fetch(`${API_BASE}/api/members/${id}`, {
+          method: 'PUT',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Delete-Code': authCode
+          },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        // Add mode (POST)
+        res = await fetch(`${API_BASE}/api/members`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
 
       if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error("Invalid authorization code.");
         const errorData = await res.json().catch(() => ({}));
         const errMsg = errorData.errors ? Object.values(errorData.errors).flat().join(', ') : (errorData.message || 'Failed to save member.');
         throw new Error(errMsg);
@@ -734,11 +1551,167 @@
       loadMembers();
       loadStats();
     } catch (err) {
-      alert(`Error saving member: ${err.message}`);
+      showToast(`Error saving member: ${err.message}`, 'error');
     } finally {
       saveBtn.disabled = false;
       saveBtn.innerHTML = `<span>Save Teen Record</span>`;
     }
+  }
+
+  // 6.5 Bulk Delete Member
+  let selectedIds = [];
+
+  function toggleSelectAll(checkbox) {
+    const checkboxes = document.querySelectorAll('.member-checkbox');
+    checkboxes.forEach(cb => {
+      cb.checked = checkbox.checked;
+    });
+    handleSelectionChange();
+  }
+
+  function handleSelectionChange() {
+    const checkboxes = document.querySelectorAll('.member-checkbox:checked');
+    selectedIds = Array.from(checkboxes).map(cb => cb.value);
+    
+    const btn = document.getElementById('bulk-delete-btn');
+    const count = document.getElementById('bulk-delete-count');
+    
+    if (selectedIds.length > 0) {
+      btn.classList.remove('hidden');
+      btn.classList.add('inline-flex');
+      count.textContent = `Delete (${selectedIds.length})`;
+    } else {
+      btn.classList.add('hidden');
+      btn.classList.remove('inline-flex');
+      const selectAll = document.getElementById('select-all-checkbox');
+      if (selectAll) selectAll.checked = false;
+    }
+  }
+
+  function openBulkDeleteModal() {
+    if (selectedIds.length === 0) return;
+    document.getElementById('delete-member-form').reset();
+    document.getElementById('delete-member-modal').classList.remove('hidden');
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('delete-member-modal').classList.add('hidden');
+  }
+
+  async function handleDeleteMember(e) {
+    e.preventDefault();
+    const code = document.getElementById('delete-auth-code').value;
+    const btn = document.getElementById('confirm-delete-btn');
+    
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span>
+      <span>Deleting...</span>
+    `;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/members/bulk-delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Delete-Code': code
+        },
+        body: JSON.stringify(selectedIds)
+      });
+
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error("Invalid authorization code.");
+        throw new Error('Failed to delete members.');
+      }
+
+      showToast(`${selectedIds.length} members deleted successfully.`);
+      selectedIds = [];
+      const selectAll = document.getElementById('select-all-checkbox');
+      if (selectAll) selectAll.checked = false;
+      handleSelectionChange();
+      closeDeleteModal();
+      loadMembers();
+      loadStats();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<span>Confirm Delete</span>`;
+    }
+  }
+
+  // 6.6 Clear All Members (Reset Database to Start Afresh)
+  function openClearAllModal() {
+    document.getElementById('clear-all-form').reset();
+    document.getElementById('clear-all-auth-code').value = '';
+    document.getElementById('clear-all-modal').classList.remove('hidden');
+  }
+
+  function closeClearAllModal() {
+    document.getElementById('clear-all-modal').classList.add('hidden');
+  }
+
+  async function handleClearAllMembers(e) {
+    e.preventDefault();
+    const code = document.getElementById('clear-all-auth-code').value;
+    const btn = document.getElementById('confirm-clear-all-btn');
+
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full mr-1"></span>
+      <span>Wiping Database...</span>
+    `;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/members/clear-all`, {
+        method: 'POST',
+        headers: {
+          'X-Delete-Code': code
+        }
+      });
+
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error('Invalid authorization code.');
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || 'Failed to clear members.');
+      }
+
+      const data = await res.json().catch(() => ({}));
+      showToast(data.message || 'All teen members deleted successfully. Database reset!');
+      selectedIds = [];
+      const selectAll = document.getElementById('select-all-checkbox');
+      if (selectAll) selectAll.checked = false;
+      handleSelectionChange();
+      closeClearAllModal();
+      currentPage = 1;
+      await loadMembers();
+      await loadStats();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<span>Confirm Reset & Clear All</span>`;
+    }
+  }
+
+  // Academic Level Normalizer for UI
+  function normalizeAcademicLevel(str) {
+    if (!str) return '';
+    const s = str.trim().toLowerCase();
+    if (s.includes('jss 1') || s.includes('jss1')) {
+      if (!s.includes('jss2') && !s.includes('jss 2') && !s.includes('jss3') && !s.includes('jss 3'))
+        return 'Junior Secondary (JSS1)';
+    }
+    if (s.includes('jss 2') || s.includes('jss2')) return 'Junior Secondary (JSS2)';
+    if (s.includes('jss 3') || s.includes('jss3') || s.includes('bece')) return 'Graduating JSS (JSS3)';
+    if (s.includes('ss 3') || s.includes('ss3') || s.includes('s.s.3') || s.includes('schooling ss3')) return 'Senior Secondary (SS3)';
+    if (s.includes('ss 2') || s.includes('ss2') || s.includes('s.s.2') || s.includes('s.s. ii') || s.includes('s.s ii')) return 'Senior Secondary (SS2)';
+    if (s.includes('ss 1') || s.includes('ss1') || s.includes('s.s.1') || s === 'science') return 'Senior Secondary (SS1)';
+    if (s.includes('admission') || s.includes('addmission') || s.includes('jamb')) return 'Admission seeker';
+    if (s.includes('pre-varsity') || s.includes('a-level') || s.includes('gap year')) return 'Pre-Varsity (A-Level)';
+    if (s.includes('100l') || s.includes('200l') || s.includes('300l') || s.includes('400l') || s.includes('tertiary') || s.includes('varsity') || s.includes('poly')) return 'Undergraduate (100L-400L)';
+    if (s.includes('work') || s.includes('worker') || s.includes('teach') || s.includes('trade')) return 'Working / Vocational';
+    return str.trim();
   }
 
   // 7. Bulk CSV Upload
@@ -778,7 +1751,7 @@
     const uploadBtn = document.getElementById('upload-csv-btn');
 
     if (!fileInput.files || !fileInput.files[0]) {
-      alert('Please choose a .csv file first.');
+      showToast('Please choose a .csv file first.', 'error');
       return;
     }
 
@@ -827,10 +1800,21 @@
   function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    const bg = type === 'info' ? 'bg-slate-900' : 'bg-emerald-600';
+    
+    let bg = 'bg-emerald-600';
+    let icon = '<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>';
+    
+    if (type === 'info') {
+      bg = 'bg-slate-900';
+      icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+    } else if (type === 'error') {
+      bg = 'bg-rose-600';
+      icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>';
+    }
+
     toast.className = `toast-anim pointer-events-auto px-4 py-3 rounded-2xl text-white text-xs font-semibold shadow-xl flex items-center gap-2 ${bg}`;
     toast.innerHTML = `
-      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icon}</svg>
       <span>${escapeHtml(message)}</span>
     `;
     container.appendChild(toast);
@@ -855,6 +1839,7 @@
   // Initial Boot
   window.addEventListener('DOMContentLoaded', () => {
     checkApiHealth();
+    loadUnits();
     loadStats();
     loadMembers();
   });

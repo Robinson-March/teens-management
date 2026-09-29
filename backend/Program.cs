@@ -75,6 +75,7 @@ app.UseStaticFiles();
 
 // 7. Register Minimal API Endpoints
 app.MapMemberEndpoints();
+app.MapUnitEndpoints();
 
 // Root redirect or health check
 app.MapGet("/api/health", () => Results.Ok(new

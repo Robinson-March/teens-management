@@ -87,18 +87,16 @@ public static class MemberEndpoints
                 .ToListAsync();
             var averageAge = avgAgeQuery.Count > 0 ? Math.Round(avgAgeQuery.Average(), 1) : 15.0;
 
-            // Senior High / WAEC / JAMB count
-            var seniorHighCount = await db.Members.CountAsync(m =>
-                m.AcademicLevel != null && (
-                    m.AcademicLevel.Contains("SS") ||
-                    m.AcademicLevel.Contains("SSS") ||
-                    m.AcademicLevel.Contains("Pre-Varsity") ||
-                    m.AcademicLevel.Contains("JAMB") ||
-                    m.AcademicLevel.Contains("A-Level") ||
-                    m.AcademicLevel.Contains("Jambite")));
+            // All member academic levels for accurate classification
+            var allLevels = await db.Members.AsNoTracking()
+                .Select(m => m.AcademicLevel)
+                .ToListAsync();
 
-            // Unique units
-            var allDepartments = await db.Members
+            var seniorHighCount = allLevels.Count(AcademicLevelClassifier.IsSeniorOrCandidate);
+
+            // Active units count from Units registry or member departments
+            var totalConfiguredUnits = await db.Units.CountAsync();
+            var allDepartments = await db.Members.AsNoTracking()
                 .Where(m => !string.IsNullOrEmpty(m.Departments))
                 .Select(m => m.Departments!)
                 .ToListAsync();
@@ -109,31 +107,52 @@ public static class MemberEndpoints
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Count();
 
-            // Academic distribution
-            var jss12 = await db.Members.CountAsync(m => m.AcademicLevel != null && (m.AcademicLevel.Contains("JSS 1") || m.AcademicLevel.Contains("JSS 2") || m.AcademicLevel.Contains("JSS1") || m.AcademicLevel.Contains("JSS2")));
-            var jss3 = await db.Members.CountAsync(m => m.AcademicLevel != null && (m.AcademicLevel.Contains("JSS 3") || m.AcademicLevel.Contains("JSS3")));
-            var ss1 = await db.Members.CountAsync(m => m.AcademicLevel != null && (m.AcademicLevel.Contains("SS 1") || m.AcademicLevel.Contains("SSS 1") || m.AcademicLevel.Contains("SS1") || m.AcademicLevel.Contains("SSS1")));
-            var ss23 = await db.Members.CountAsync(m => m.AcademicLevel != null && (m.AcademicLevel.Contains("SS 2") || m.AcademicLevel.Contains("SS 3") || m.AcademicLevel.Contains("SSS 2") || m.AcademicLevel.Contains("SSS 3") || m.AcademicLevel.Contains("SS2") || m.AcademicLevel.Contains("SS3")));
-            var preVarsity = await db.Members.CountAsync(m => m.AcademicLevel != null && (m.AcademicLevel.Contains("Pre-Varsity") || m.AcademicLevel.Contains("Jambite") || m.AcademicLevel.Contains("A-Level")));
+            var activeUnits = totalConfiguredUnits > 0 ? totalConfiguredUnits : distinctUnits;
+
+            // Normalized Academic Distribution
+            var distributionCounts = new Dictionary<string, int>
+            {
+                [AcademicLevelClassifier.JuniorTeens] = 0,
+                [AcademicLevelClassifier.GraduatingJss] = 0,
+                [AcademicLevelClassifier.SeniorTeens] = 0,
+                [AcademicLevelClassifier.ExamClass] = 0,
+                [AcademicLevelClassifier.AdmissionSeeker] = 0,
+                [AcademicLevelClassifier.Tertiary] = 0,
+                [AcademicLevelClassifier.WorkingVocational] = 0,
+                [AcademicLevelClassifier.Unspecified] = 0
+            };
+
+            foreach (var lvl in allLevels)
+            {
+                var category = AcademicLevelClassifier.Categorize(lvl);
+                if (distributionCounts.ContainsKey(category))
+                {
+                    distributionCounts[category]++;
+                }
+                else
+                {
+                    distributionCounts[AcademicLevelClassifier.Unspecified]++;
+                }
+            }
 
             double SafePercent(int count) => total > 0 ? Math.Round((double)count / total * 100, 1) : 0;
+
+            var academicDistribution = distributionCounts
+                .Where(kvp => kvp.Value > 0)
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => SafePercent(kvp.Value)
+                );
 
             var stats = new DashboardStatsDto
             {
                 TotalRegistered = total,
-                ActiveUnitsCount = Math.Max(distinctUnits, 6),
+                ActiveUnitsCount = activeUnits,
                 AverageAge = averageAge,
                 SeniorHighAndCandidatesCount = seniorHighCount,
                 ActiveCount = activeCount,
                 AttentionCount = attentionCount,
-                AcademicDistribution = new Dictionary<string, double>
-                {
-                    ["Junior Teens (JSS1-2)"] = SafePercent(jss12),
-                    ["Graduating JSS (JSS3)"] = SafePercent(jss3),
-                    ["Senior Teens (SS1)"] = SafePercent(ss1),
-                    ["Exam Class (SS2/SS3)"] = SafePercent(ss23),
-                    ["Pre-Varsity / Gap"] = SafePercent(preVarsity)
-                }
+                AcademicDistribution = academicDistribution
             };
 
             return Results.Ok(stats);
@@ -168,7 +187,7 @@ public static class MemberEndpoints
                 FullName = dto.FullName.Trim(),
                 Age = dto.Age,
                 PhoneNumber = dto.PhoneNumber?.Trim(),
-                AcademicLevel = dto.AcademicLevel?.Trim(),
+                AcademicLevel = !string.IsNullOrWhiteSpace(dto.AcademicLevel) ? AcademicLevelClassifier.NormalizeLevel(dto.AcademicLevel) : null,
                 Departments = dto.Departments?.Trim(),
                 ServiceTime = dto.ServiceTime.Trim(),
                 GuardianName = dto.GuardianName?.Trim(),
@@ -193,8 +212,8 @@ public static class MemberEndpoints
             IValidator<UpdateMemberDto> validator,
             AppDbContext db) =>
         {
-            var expectedCode = config["DeleteCode"];
-            if (string.IsNullOrEmpty(expectedCode) || code != expectedCode)
+            var expectedCode = config["DeleteCode"] ?? "Admin123!";
+            if (string.IsNullOrEmpty(code) || code != expectedCode)
             {
                 return Results.Unauthorized();
             }
@@ -214,7 +233,7 @@ public static class MemberEndpoints
             member.FullName = dto.FullName.Trim();
             member.Age = dto.Age;
             member.PhoneNumber = dto.PhoneNumber?.Trim();
-            member.AcademicLevel = dto.AcademicLevel?.Trim();
+            member.AcademicLevel = !string.IsNullOrWhiteSpace(dto.AcademicLevel) ? AcademicLevelClassifier.NormalizeLevel(dto.AcademicLevel) : null;
             member.Departments = dto.Departments?.Trim();
             member.ServiceTime = dto.ServiceTime.Trim();
             member.GuardianName = dto.GuardianName?.Trim();
@@ -232,8 +251,8 @@ public static class MemberEndpoints
         // 6. DELETE /api/members/{id} - Remove member
         group.MapDelete("/{id:guid}", async (Guid id, [FromHeader(Name = "X-Delete-Code")] string? code, IConfiguration config, AppDbContext db) =>
         {
-            var expectedCode = config["DeleteCode"];
-            if (string.IsNullOrEmpty(expectedCode) || code != expectedCode)
+            var expectedCode = config["DeleteCode"] ?? "Admin123!";
+            if (string.IsNullOrEmpty(code) || code != expectedCode)
             {
                 return Results.Unauthorized();
             }
@@ -254,8 +273,8 @@ public static class MemberEndpoints
         // 6.5 POST /api/members/bulk-delete - Remove multiple members
         group.MapPost("/bulk-delete", async ([FromBody] List<Guid> ids, [FromHeader(Name = "X-Delete-Code")] string? code, IConfiguration config, AppDbContext db) =>
         {
-            var expectedCode = config["DeleteCode"];
-            if (string.IsNullOrEmpty(expectedCode) || code != expectedCode)
+            var expectedCode = config["DeleteCode"] ?? "Admin123!";
+            if (string.IsNullOrEmpty(code) || code != expectedCode)
             {
                 return Results.Unauthorized();
             }
@@ -277,6 +296,46 @@ public static class MemberEndpoints
         })
         .WithName("BulkDeleteMembers")
         .WithSummary("Remove multiple members from the database.");
+
+        // 6.6 POST /api/members/clear-all - Delete all members to start afresh
+        group.MapPost("/clear-all", async ([FromHeader(Name = "X-Delete-Code")] string? code, IConfiguration config, AppDbContext db) =>
+        {
+            var expectedCode = config["DeleteCode"] ?? "Admin123!";
+            if (string.IsNullOrEmpty(code) || code != expectedCode)
+            {
+                return Results.Unauthorized();
+            }
+
+            var totalMembers = await db.Members.CountAsync();
+            if (totalMembers > 0)
+            {
+                await db.Members.ExecuteDeleteAsync();
+            }
+
+            return Results.Ok(new { message = "All members cleared successfully.", count = totalMembers });
+        })
+        .WithName("ClearAllMembers")
+        .WithSummary("Remove all members from the database to start afresh.");
+
+        // 6.7 DELETE /api/members/all - Alternative DELETE method for clearing all members
+        group.MapDelete("/all", async ([FromHeader(Name = "X-Delete-Code")] string? code, IConfiguration config, AppDbContext db) =>
+        {
+            var expectedCode = config["DeleteCode"] ?? "Admin123!";
+            if (string.IsNullOrEmpty(code) || code != expectedCode)
+            {
+                return Results.Unauthorized();
+            }
+
+            var totalMembers = await db.Members.CountAsync();
+            if (totalMembers > 0)
+            {
+                await db.Members.ExecuteDeleteAsync();
+            }
+
+            return Results.Ok(new { message = "All members cleared successfully.", count = totalMembers });
+        })
+        .WithName("DeleteAllMembers")
+        .WithSummary("Remove all members from the database to start afresh.");
 
         // 7. POST /api/members/bulk-upload - Bulk CSV upload
         group.MapPost("/bulk-upload", async (

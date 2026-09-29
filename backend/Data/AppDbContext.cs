@@ -10,10 +10,39 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Member> Members => Set<Member>();
+    public DbSet<ChurchUnit> Units => Set<ChurchUnit>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<ChurchUnit>(entity =>
+        {
+            entity.ToTable("Units");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.HasIndex(e => e.Name)
+                .IsUnique();
+
+            entity.Property(e => e.Description)
+                .HasMaxLength(250);
+
+            entity.Property(e => e.BadgeColor)
+                .HasMaxLength(30)
+                .HasDefaultValue("purple");
+
+            entity.Property(e => e.IconKey)
+                .HasMaxLength(50)
+                .HasDefaultValue("sparkles");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
 
         modelBuilder.Entity<Member>(entity =>
         {
